@@ -1,102 +1,47 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using Bit34.Unity.Graph.Utilities;
 using Bit34.Unity.Graph.Base;
 
 
-public class GraphTest : GraphTestBase
+public class GraphTest : BaseTest
 {
     //  MEMBERS
-    //      For Editor
-#pragma warning disable 0649
-    [SerializeField] private Button     _ChangeModeButton;
-    [SerializeField] private Text       _ActiveModeLabel;
-    [SerializeField] private GameObject _NodeContainer;
-    [SerializeField] private GameObject _NodePrefab;
-    [SerializeField] private Material   _StaticEdgeMaterial;
-    [SerializeField] private Material   _DynamicEdgeMaterial;
-    [SerializeField] private Material   _PathEdgeMaterial;
-#pragma warning restore 0649
     //      Internal
-    private GraphTestModes _Mode;
-    private TestGraph      _Graph;
-
-    private int _PathStartNodeId;
-    private int _PathTargetNodeId;
-    private GraphPath _Path;
+    private GraphTestGraph  _Graph;
+    private GraphPath       _Path;
     private GraphPathConfig _PathConfig;
 
+
     //  METHODS
-    //      Unity callbacks
-    void Start()
+
+#region Edit Mode
+
+    override protected void EditModeInit()
     {
-        _ChangeModeButton.onClick.AddListener(()=>
+        if(_Graph==null)
+        {
+            _Graph = new GraphTestGraph();
+
+            for (int i = 0; i < NodeContainer.transform.childCount; i++)
             {
-                int nextModeValue = (1+(int)_Mode)%((int)GraphTestModes.Max_Modes);
-                GraphTestModes nextMode = (GraphTestModes)nextModeValue;
-                SetMode(nextMode);
-            });
-        
-        _Graph = new TestGraph();
-        
-        EditModeInit();
-        PathFindModeInit();
+                GameObject             nodeObject    = NodeContainer.transform.GetChild(i).gameObject;
+                GraphTestNodeComponent nodeComponent = nodeObject.GetComponent<GraphTestNodeComponent>();
+                GraphTestNode          node          = _Graph.CreateNode(0);
 
-        SetMode(GraphTestModes.Edit);
-    }
+                node.GetData().SceneObject = nodeObject;
+                node.Position = nodeComponent.transform.position;
+                nodeComponent.Init(node);
 
-    private void Update()
-    {
-        switch(_Mode)
-        {
-            case GraphTestModes.Edit:     EditModeUpdate();     break;
-            case GraphTestModes.PathFind: PathFindModeUpdate(); break;
+                ConnectNodeToOthers(node);
+
+                Nodes.Add(node.Id, nodeComponent);
+            }
         }
     }
 
-    private void OnPostRender()
-    {
-        GraphUtilities.DrawStaticEdges(_Graph, _StaticEdgeMaterial);
-        GraphUtilities.DrawDynamicEdges(_Graph, _DynamicEdgeMaterial);
-        if(_Path!=null)
-        {
-            GraphUtilities.DrawPath(_Graph, _Path, _PathEdgeMaterial);
-        }
-    }
-
-    private void SetMode(GraphTestModes newMode)
-    {
-        switch(_Mode)
-        {
-            case GraphTestModes.Edit:     EditModeUninit();     break;
-            case GraphTestModes.PathFind: PathFindModeUninit(); break;
-        }
-
-        _Mode = newMode;
-        _ActiveModeLabel.text = _Mode.ToString() + " mode";
-    }
-
-#region Edit
-
-    private void EditModeInit()
-    {
-        for (int i = 0; i < _NodeContainer.transform.childCount; i++)
-        {                              
-            GameObject          nodeObject = _NodeContainer.transform.GetChild(i).gameObject;
-            GraphTestNodeComponent nodeScript = nodeObject.GetComponent<GraphTestNodeComponent>();
-            TestNode       node       = _Graph.CreateNode(0);
-            node.GetData().Value = node.Id;
-            node.GetData().SceneObject = nodeObject;
-            node.Position = nodeScript.transform.position;
-            nodeScript.Init(node);
-
-            ConnectNodeToOthers(node);
-        }
-    }
-
-    private void EditModeUpdate()
+    override protected void EditModeUpdate()
     {
         if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject() == false)
         {
@@ -109,36 +54,44 @@ public class GraphTest : GraphTestBase
                 GraphTestNodeComponent nodeScript = hit.collider.GetComponent<GraphTestNodeComponent>();
                 if(nodeScript!=null)
                 {
+                    Nodes.Remove(nodeScript.Node.Id);
                     _Graph.RemoveNode(nodeScript.Node.Id);
                     Destroy(nodeScript.gameObject);
                 }
             }
             else
             {
-                GameObject          nodeObject = Instantiate(_NodePrefab, _NodeContainer.transform);
-                GraphTestNodeComponent nodeScript = nodeObject.GetComponent<GraphTestNodeComponent>();
-                Vector3             nodePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition+new Vector3(0,0,-Camera.main.transform.position.z));
-                TestNode            node       = _Graph.CreateNode(0);
-                node.GetData().Value = node.Id;
+                GameObject             nodeObject    = Instantiate(NodePrefab, NodeContainer.transform);
+                GraphTestNodeComponent nodeComponent = nodeObject.GetComponent<GraphTestNodeComponent>();
+                Vector3                nodePosition  = Camera.main.ScreenToWorldPoint(Input.mousePosition+new Vector3(0,0,-Camera.main.transform.position.z));
+                GraphTestNode          node          = _Graph.CreateNode(0);
+
                 node.GetData().SceneObject = nodeObject;
-                node.Position = nodeScript.transform.position = nodePosition;
-                nodeScript.Init(node);
+                node.Position = nodePosition;
+                nodeObject.transform.position = nodePosition;
+                nodeComponent.Init(node);
 
                 ConnectNodeToOthers(node);
+
+                Nodes.Add(node.Id, nodeComponent);
             }
         }
     }
 
-    private void EditModeUninit()
-    {}
-
-    private void ConnectNodeToOthers(TestNode node)
+    override protected void EditModePostRender()
     {
-        IEnumerator<TestNode> nodes =_Graph.GetNodeEnumerator();
+        GraphUtilities.DrawDynamicEdges(_Graph, DynamicEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
+    }
+
+    override protected void EditModeUninit() { }
+
+    private void ConnectNodeToOthers(GraphTestNode node)
+    {
+        IEnumerator<GraphTestNode> nodes =_Graph.GetNodeEnumerator();
 
         while(nodes.MoveNext())
         {
-            TestNode node2 = nodes.Current;
+            GraphTestNode node2 = nodes.Current;
 
             //  Skip self
             if(node2 == node)
@@ -167,104 +120,16 @@ public class GraphTest : GraphTestBase
 
 #endregion
 
+
 #region Path finding
 
-    private void PathFindModeInit()
+    override protected void PathFindModeInit()
     {
         _PathConfig = new GraphPathConfig(true, true);
-        _PathStartNodeId = -1;
-        _PathTargetNodeId = -1;
-    }
-
-    private void PathFindModeUpdate()
-    {
-        //  Clicked on scene
-        if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject() == false)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            bool hitSomething = Physics.Raycast(ray, out hit);
-
-            //  input intersects an object
-            if(hitSomething)
-            {
-                //  Objcet is a node
-                GraphTestNodeComponent nodeComponent = hit.collider.GetComponent<GraphTestNodeComponent>();
-                if(nodeComponent!=null)
-                {
-                    //  Nothing selected before
-                    if(_PathStartNodeId==-1 && _PathTargetNodeId==-1)
-                    {
-                        SelectPathStart(nodeComponent);
-                    }
-                    else
-                    //  Start selected
-                    if(_PathStartNodeId!=-1 && _PathTargetNodeId==-1)
-                    {
-                        //  New selection is same as start
-                        if(_PathStartNodeId == nodeComponent.Node.Id)
-                        {
-                            ClearPathAndSelection();
-                        }
-                        else
-                        {
-                            SelectPathTarget(nodeComponent);
-                            FindPath();
-                        }
-                    }
-                    else
-                    //  Start and target selected
-                    if(_PathStartNodeId!=-1 && _PathTargetNodeId!=-1)
-                    {
-                        SelectPathStart(nodeComponent);
-                    }
-                }
-            }
-            //  Input is not intersecting an object
-            else
-            {
-                ClearPathAndSelection();
-            }
-        }
-    }
-
-    private void PathFindModeUninit()
-    {
-        ClearPathAndSelection();
-    }
-
-    private void ClearPathAndSelection()
-    {
-        if(_PathStartNodeId!=-1)
-        {
-            _Graph.GetNodeById(_PathStartNodeId).GetData().SceneObject.GetComponent<GraphTestNodeComponent>().SetAsRegular();
-            _PathStartNodeId = -1;
-        }
-
-        if(_PathTargetNodeId!=-1)
-        {
-            _Graph.GetNodeById(_PathTargetNodeId).GetData().SceneObject.GetComponent<GraphTestNodeComponent>().SetAsRegular();
-            _PathTargetNodeId = -1;
-        }
-
         _Path = null;
     }
 
-    private void SelectPathStart(GraphTestNodeComponent nodeComponent)
-    {
-        ClearPathAndSelection();
-
-        _PathStartNodeId = nodeComponent.Node.Id;
-        nodeComponent.SetAsStart();
-    }
-
-    private void SelectPathTarget(GraphTestNodeComponent nodeComponent)
-    {
-        _PathTargetNodeId = nodeComponent.Node.Id;
-        nodeComponent.SetAsTarget();
-    }
-
-    private void FindPath()
+    override protected void PathFindUpdatePath()
     {
         _Path = new GraphPath();
         if(_Graph.FindPath(_PathStartNodeId, _PathTargetNodeId, _PathConfig, _Path)==false)
@@ -272,6 +137,22 @@ public class GraphTest : GraphTestBase
             _Path = null;
         }
     }
+    
+    override protected void PathFindClearPath()
+    {
+        _Path = null;
+    }
+
+    override protected void PathFindModePostRender()
+    {
+        GraphUtilities.DrawDynamicEdges(_Graph, DynamicEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
+        if(_Path!=null)
+        {
+            GraphUtilities.DrawPath(_Graph, _Path, PathEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
+        }
+    }
+
+    override protected void PathFindModeUninit() { }
 
 #endregion
 

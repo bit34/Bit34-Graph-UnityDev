@@ -1,36 +1,32 @@
 ﻿using Bit34.Unity.Graph.Base;
-using UnityEngine;
 
-public class TestNodeData
+
+public class GraphTestNodeData : BaseTestNodeData { }
+
+public class GraphTestEdgeData : BaseTestEdgeData { }
+
+
+public class GraphTestNode : GraphNode
 {
-    public int        Value;
-    public GameObject SceneObject;
-}
-
-public class TestEdgeData{}
-
-
-public class TestNode : GraphNode
-{
-    public TestNodeData GetData()
+    public GraphTestNodeData GetData()
     {
-        return GetData<TestNodeData>();
+        return GetData<GraphTestNodeData>();
     }
 }
 
-public class TestEdge : GraphEdge
+public class GraphTestEdge : GraphEdge
 {
-    public TestEdgeData GetData()
+    public GraphTestEdgeData GetData()
     {
-        return GetData<TestEdgeData>();
+        return GetData<GraphTestEdgeData>();
     }
 }
 
-public class TestGraphAllocator : GraphDefaultAllocator<TestNode, TestEdge, TestNodeData, TestEdgeData>{}
+public class GraphTestGraphAllocator : GraphDefaultAllocator<GraphTestNode, GraphTestEdge, GraphTestNodeData, GraphTestEdgeData>{}
 
-public class TestGraph : Graph<TestNode, TestEdge>
+public class GraphTestGraph : Graph<GraphTestNode, GraphTestEdge>
 {
-    public TestGraph() :
-     base(new TestGraphAllocator())
+    public GraphTestGraph() :
+     base(new GraphTestGraphAllocator())
     {}
 }

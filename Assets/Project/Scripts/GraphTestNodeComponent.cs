@@ -1,42 +1,20 @@
-using UnityEngine;
+using Bit34.Unity.Graph.Base;
 
 
-public class GraphTestNodeComponent : MonoBehaviour
+public class GraphTestNodeComponent : BaseTestNodeComponent
 {
     //  MEMBERS
-    public TestNode Node { get; private set; }
-    //      For Editor
-#pragma warning disable 0649
-    [SerializeField] private SpriteRenderer _Shape;
-    [SerializeField] private Sprite         _RegularSprite;
-    [SerializeField] private Sprite         _PathStartSprite;
-    [SerializeField] private Sprite         _PathTargetSprite;
-    [SerializeField] private TextMesh       _InfoText;
-#pragma warning restore 0649
+    override public int NodeId { get{ return Node.Id; } }
+    public GraphNode Node { get; private set; }
 
 
     //  METHODS
-    public void Init(TestNode node)
+    public void Init(GraphNode node)
     {
         Node = node;
         gameObject.name = "Node" + node.Id;
 
-        _InfoText.text = Node.GetData().Value.ToString();
-    }
-
-    public void SetAsStart()
-    {
-        _Shape.sprite = _PathStartSprite;
-    }
-
-    public void SetAsTarget()
-    {
-        _Shape.sprite = _PathTargetSprite;
-    }
-
-    public void SetAsRegular()
-    {
-        _Shape.sprite = _RegularSprite;
+        SetInfoText( Node.Id.ToString() );
     }
 
 }

@@ -1,4 +1,4 @@
-public enum GraphTestModes : int
+public enum BaseTestModes : int
 {
     Edit,
     PathFind,

@@ -85,8 +85,8 @@ TextMesh:
   m_Anchor: 4
   m_Alignment: 1
   m_TabSize: 4
-  m_FontSize: 156
-  m_FontStyle: 1
+  m_FontSize: 90
+  m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
@@ -182,9 +182,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5801267140626985353}
   - component: {fileID: 3822082201758949061}
-  - component: {fileID: 5333183119279330484}
+  - component: {fileID: 8926515779051084175}
   m_Layer: 0
-  m_Name: GraphTestNode
+  m_Name: GridTestNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -219,7 +219,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5333183119279330484
+--- !u!114 &8926515779051084175
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5100921520599782028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d440e4984f01406c823b40e947f4f35, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b3a9bddd0f8b43c590e135c388c992b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _Collider: {fileID: 3822082201758949061}
