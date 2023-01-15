@@ -1,1 +1,0 @@
-Bit34-Unity-Graph ^0.4.0 git@bitbucket.org:Bit34LibraryDev/bit34-unity-graph.git
