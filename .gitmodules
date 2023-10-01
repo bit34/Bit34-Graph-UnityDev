@@ -1,0 +1,3 @@
+[submodule "Assets/Libraries/Graph"]
+	path = Assets/Libraries/Graph
+	url = git@github.com:bit34/Bit34-Graph-UPM.git

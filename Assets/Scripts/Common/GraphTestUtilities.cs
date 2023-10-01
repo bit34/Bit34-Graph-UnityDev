@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Com.Bit34Games.Graphs;
-using Com.Bit34Games.Graphs.Unity;
 
 public static class GraphTestUtilities
 {
-    static public void DrawStaticEdges<TConfig, TNode, TEdge>(Graph<TConfig, TNode, TEdge> graph, Material edgeMaterial, Matrix4x4 matrix)
-        where TConfig : GraphConfig
+    static public void DrawStaticEdges<TConfig, TNode, TConnection>(Graph<TConfig, TNode, TConnection> graph, Material edgeMaterial, Matrix4x4 matrix)
+        where TConfig : GraphConfig<TNode>
         where TNode : GraphNode, IGraphNodeForUnity
-        where TEdge : GraphEdge
+        where TConnection : GraphConnection
     {
         edgeMaterial.SetPass(0);
         GL.Begin(GL.LINES);
@@ -18,13 +17,13 @@ public static class GraphTestUtilities
         {
             TNode node = nodes.Current;
 
-            for(int i=0; i<node.StaticEdgeCount; i++)
+            for(int i=0; i<node.StaticConnectionCount; i++)
             {
-                GraphEdge edge = node.GetStaticEdge(i);
+                GraphConnection connection = node.GetStaticConnection(i);
                 
-                if(edge!=null)
+                if(connection!=null)
                 {
-                    DrawEdge(graph, edge, matrix);
+                    DrawEdge(graph, connection, matrix);
                 }
             }
         }
@@ -32,10 +31,10 @@ public static class GraphTestUtilities
         GL.End();
     }
 
-    static public void DrawDynamicEdges<TConfig, TNode, TEdge>(Graph<TConfig, TNode, TEdge> graph, Material edgeMaterial, Matrix4x4 matrix)
-        where TConfig : GraphConfig
+    static public void DrawDynamicEdges<TConfig, TNode, TConnection>(Graph<TConfig, TNode, TConnection> graph, Material edgeMaterial, Matrix4x4 matrix)
+        where TConfig : GraphConfig<TNode>
         where TNode : GraphNode, IGraphNodeForUnity
-        where TEdge : GraphEdge
+        where TConnection : GraphConnection
     {
         edgeMaterial.SetPass(0);
         GL.Begin(GL.LINES);
@@ -45,39 +44,39 @@ public static class GraphTestUtilities
         {
             TNode node = nodes.Current;
 
-            IEnumerator<GraphEdge>edges = node.GetDynamicEdgeEnumerator();
-            while(edges.MoveNext())
+            IEnumerator<GraphConnection>connections = node.GetDynamicConnectionEnumerator();
+            while(connections.MoveNext())
             {
-                DrawEdge(graph, edges.Current, matrix);
+                DrawEdge(graph, connections.Current, matrix);
             }
         }
 
         GL.End();
     }
 
-    static public void DrawPath<TConfig, TNode, TEdge>(Graph<TConfig, TNode, TEdge> graph, GraphPath path, Material edgeMaterial, Matrix4x4 matrix)
-        where TConfig : GraphConfig
+    static public void DrawPath<TConfig, TNode, TConnection>(Graph<TConfig, TNode, TConnection> graph, GraphPath path, Material edgeMaterial, Matrix4x4 matrix)
+        where TConfig : GraphConfig<TNode>
         where TNode : GraphNode, IGraphNodeForUnity
-        where TEdge : GraphEdge
+        where TConnection : GraphConnection
     {
         edgeMaterial.SetPass(0);
         GL.Begin(GL.LINES);
 
-        IEnumerator<GraphEdge> edges = path.Edges.GetEnumerator();
-        while (edges.MoveNext() == true)
+        IEnumerator<GraphConnection> connections = path.Connections.GetEnumerator();
+        while (connections.MoveNext() == true)
         {
-            DrawEdge(graph, edges.Current, matrix);
+            DrawEdge(graph, connections.Current, matrix);
         }
 
         GL.End();
     }
 
-    static private void DrawEdge<TConfig, TNode, TEdge>(Graph<TConfig, TNode, TEdge> graph, GraphEdge edge, Matrix4x4 matrix)
-        where TConfig : GraphConfig
+    static private void DrawEdge<TConfig, TNode, TConnection>(Graph<TConfig, TNode, TConnection> graph, GraphConnection connection, Matrix4x4 matrix)
+        where TConfig : GraphConfig<TNode>
         where TNode : GraphNode, IGraphNodeForUnity
-        where TEdge : GraphEdge
+        where TConnection : GraphConnection
     {
-        GL.Vertex( matrix.MultiplyPoint( graph.GetNode(edge.SourceNodeId).GetPosition() ) );
-        GL.Vertex( matrix.MultiplyPoint( graph.GetNode(edge.TargetNodeId).GetPosition() ) );
+        GL.Vertex( matrix.MultiplyPoint( graph.GetNode(connection.SourceNodeId).GetPosition() ) );
+        GL.Vertex( matrix.MultiplyPoint( graph.GetNode(connection.TargetNodeId).GetPosition() ) );
     }
 }

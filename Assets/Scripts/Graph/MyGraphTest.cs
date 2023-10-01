@@ -2,21 +2,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Com.Bit34Games.Graphs;
-using Com.Bit34Games.Graphs.Unity;
 
-public class MyGraphNode : GraphNodeForUnity
-{
-    public GraphTestNodeComponent component;
-}
-
-public class MyGraphEdge : GraphEdgeForUnity{}
-
-public class MyGraph : Graph<GraphConfigForUnity, MyGraphNode, MyGraphEdge>
-{
-    public MyGraph():base(new GraphConfigForUnity(0), new GraphAllocator<MyGraphNode, MyGraphEdge>()){}
-}
-
-public class GraphTest : GraphTestBase
+public class MyGraphTest : GraphTestBase
 {
     //  MEMBERS
     //      Internal
@@ -62,7 +49,7 @@ public class GraphTest : GraphTestBase
                 GraphTestNodeComponent nodeComponent = hit.collider.GetComponent<GraphTestNodeComponent>();
                 if (nodeComponent!=null)
                 {
-                    _graph.RemoveNode(nodeComponent.Node.Id);
+                    _graph.DeleteNode(nodeComponent.Node.Id);
                     Destroy(nodeComponent.gameObject);
                 }
             }
@@ -150,7 +137,7 @@ public class GraphTest : GraphTestBase
             }
 
             //  skip if already connected
-            if (node.HasDynamicEdgeTo(sourceNode.Id))
+            if (node.GetDynamicConnectionTo(sourceNode.Id)!=null)
             {
                 continue;
             }
@@ -163,7 +150,7 @@ public class GraphTest : GraphTestBase
             bool       hitSomething = Physics.Raycast(ray, out hit, distance, LayerMasks.Obstacles);
             if (hitSomething==false)
             {
-                _graph.CreateEdge(sourceNode, node);
+                _graph.ConnectNodes(sourceNode.Id, node.Id);
             }
         }
     }

@@ -1,24 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Com.Bit34Games.Graphs;
-using Com.Bit34Games.Graphs.Unity;
 
-public class MyRectGraphNode : RectGraphNodeForUnity
-{
-    public GraphTestNodeComponent component;
-    public bool                      isAccesible;
-}
 
-public class MyRectGraphEdge : RectGraphEdgeForUnity {}
-
-public class MyRectGraph : RectGraph<RectGraphConfigForUnity, MyRectGraphNode, MyRectGraphEdge>
-{
-    public MyRectGraph(int columnCount, int rowCount, RectGraphConfigForUnity config) :
-     base(config, new GraphAllocator<MyRectGraphNode, MyRectGraphEdge>(), columnCount, rowCount)
-    {}
-}
-
-public class RectGraphTest : GraphTestBase
+public class MyRectGraphTest : GraphTestBase
 {
     //  MEMBERS
     //      For Editor
@@ -73,11 +58,11 @@ public class RectGraphTest : GraphTestBase
 
         int columnCount = (int)_columnCountSlider.value;
         int rowCount    = (int)_rowCountSlider.value;
-        RectGraphConfigForUnity config = new RectGraphConfigForUnity(Vector3.right, 
-                                                                     Vector3.up, 
-                                                                     false, 
-                                                                     _hasStraghtEdgesToggle.isOn, 
-                                                                     _hasDiagonalEdgesToggle.isOn);
+        MyRectGraphConfig config = new MyRectGraphConfig(Vector3.right, 
+                                                         Vector3.up, 
+                                                         false, 
+                                                         _hasStraghtEdgesToggle.isOn, 
+                                                         _hasDiagonalEdgesToggle.isOn);
         _columnCountLabel.text = "Columns : " + columnCount;
         _rowCountLabel.text    = "Rows : "    + rowCount;
         _graph = new MyRectGraph(columnCount, rowCount, config);
@@ -170,9 +155,9 @@ public class RectGraphTest : GraphTestBase
     
 #endregion
 
-    private bool IsEdgeAccesible(GraphEdge edge, GraphAgent agent)
+    private bool IsEdgeAccesible(GraphConnection connection, GraphAgent agent)
     {
-        return _graph.GetNode(edge.TargetNodeId).isAccesible;
+        return _graph.GetNode(connection.TargetNodeId).isAccesible;
     }
 
 }
