@@ -28,8 +28,7 @@ public abstract class GraphTestBase : MonoBehaviour
     private   GraphTestModes _mode;
     protected int               _pathStartNodeId;
     protected int               _pathTargetNodeId;
-    protected GraphPath         _path;
-    protected GraphPathConfig   _pathConfig;
+    protected AgentPath         _path;
 
 
     //  METHODS

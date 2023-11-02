@@ -7,7 +7,9 @@ public class MyGraphTest : GraphTestBase
 {
     //  MEMBERS
     //      Internal
-    private MyGraph _graph;
+    private MyGraph             _graph;
+    private MyAgent             _agent;
+    private MyAgentPathConfig   _pathConfig;
 
 
     //  METHODS
@@ -33,6 +35,11 @@ public class MyGraphTest : GraphTestBase
 
                 ConnectNodeToOthers(node);
             }
+
+            _agent = new MyAgent();
+            _graph.AddAgent(_agent);
+
+            _pathConfig = new MyAgentPathConfig();
         }
     }
 
@@ -86,14 +93,13 @@ public class MyGraphTest : GraphTestBase
 
     override protected void PathFindModeInit()
     {
-        _pathConfig = new GraphPathConfig(true, true);
-        _path       = null;
+        _path = null;
     }
 
     override protected void PathFindUpdatePath()
     {
-        _path = new GraphPath();
-        if (_graph.FindPath(_pathStartNodeId, _pathTargetNodeId, _pathConfig, _path)==false)
+        _path = new AgentPath();
+        if (_agent.FindPath(_pathStartNodeId, _pathTargetNodeId, _pathConfig, _path)==false)
         {
             _path = null;
         }

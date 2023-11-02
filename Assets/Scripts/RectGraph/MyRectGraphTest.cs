@@ -18,8 +18,10 @@ public class MyRectGraphTest : GraphTestBase
     [SerializeField] private Toggle     _hasDiagonalEdgesToggle;
 #pragma warning restore 0649
     //      Internal
-    private bool        _uiInitialized;
-    private MyRectGraph _graph;
+    private bool                    _uiInitialized;
+    private MyRectGraph             _graph;
+    private MyRectAgent             _agent;
+    private MyRectAgentPathConfig   _pathConfig;
 
 
     //  METHODS
@@ -68,6 +70,11 @@ public class MyRectGraphTest : GraphTestBase
         _graph = new MyRectGraph(columnCount, rowCount, config);
 
         CreateNodeObjects();
+
+        _agent = new MyRectAgent();
+        _graph.AddAgent(_agent);
+
+        _pathConfig = new MyRectAgentPathConfig(IsEdgeAccesible);
     }
 
     private void CreateNodeObjects()
@@ -119,14 +126,13 @@ public class MyRectGraphTest : GraphTestBase
     override protected void PathFindModeInit()
     {
         _editGraphPanel.SetActive(false);
-        _pathConfig = new GraphPathConfig(true, true, IsEdgeAccesible);
-        _path       = null;
+        _path = null;
     }
 
     override protected void PathFindUpdatePath()
     {
-        _path = new GraphPath();
-        if (_graph.FindPath(_pathStartNodeId, _pathTargetNodeId, _pathConfig, _path)==false)
+        _path = new AgentPath();
+        if (_agent.FindPath(_pathStartNodeId, _pathTargetNodeId, _pathConfig, _path)==false)
         {
             _path = null;
         }
@@ -155,7 +161,7 @@ public class MyRectGraphTest : GraphTestBase
     
 #endregion
 
-    private bool IsEdgeAccesible(GraphConnection connection, GraphAgent agent)
+    private bool IsEdgeAccesible(GraphConnection connection, IAgentPathOwner pathOwner)
     {
         return _graph.GetNode(connection.TargetNodeId).isAccesible;
     }
