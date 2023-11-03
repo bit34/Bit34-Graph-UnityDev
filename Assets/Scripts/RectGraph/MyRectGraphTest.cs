@@ -18,10 +18,10 @@ public class MyRectGraphTest : GraphTestBase
     [SerializeField] private Toggle     _hasDiagonalEdgesToggle;
 #pragma warning restore 0649
     //      Internal
-    private bool                    _uiInitialized;
-    private MyRectGraph             _graph;
-    private MyRectAgent             _agent;
-    private MyRectAgentPathConfig   _pathConfig;
+    private bool                  _uiInitialized;
+    private MyRectGraph           _graph;
+    private MyRectAgent           _agent;
+    private MyRectAgentPathConfig _pathConfig;
 
 
     //  METHODS
@@ -126,35 +126,31 @@ public class MyRectGraphTest : GraphTestBase
     override protected void PathFindModeInit()
     {
         _editGraphPanel.SetActive(false);
-        _path = null;
+        SetPath(null);
     }
 
     override protected void PathFindUpdatePath()
     {
-        _path = new AgentPath();
-        if (_agent.FindPath(_pathStartNodeId, _pathTargetNodeId, _pathConfig, _path)==false)
-        {
-            _path = null;
-        }
+        SetPath(_agent.FindPath(_pathStartNodeId, _pathTargetNodeId, _pathConfig));
     }
     
     override protected void PathFindClearPath()
     {
-        _path = null;
+        SetPath(null);
     }
 
     override protected void PathFindModePostRender()
     {
         GraphTestUtilities.DrawStaticEdges(_graph,  StaticEdgeMaterial,  NodeContainer.transform.localToWorldMatrix);
-        if (_path!=null)
+        if (Path!=null)
         {
-            GraphTestUtilities.DrawPath(_graph, _path, PathEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
+            GraphTestUtilities.DrawPath(_graph, Path, PathEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
         }
     }
 
     override protected void PathFindModeUninit( ) { }
 
-    override protected GraphTestNodeComponent GetNodeComponent(int nodeId)
+    override public GraphTestNodeComponent GetNodeComponent(int nodeId)
     {
         return _graph.GetNode(nodeId).component;
     }

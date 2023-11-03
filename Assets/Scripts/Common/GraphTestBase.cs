@@ -20,15 +20,17 @@ public abstract class GraphTestBase : MonoBehaviour
     [SerializeField] private Material     _staticEdgeMaterial;
     [SerializeField] private Material     _dynamicEdgeMaterial;
     [SerializeField] private Material     _pathEdgeMaterial;
+    [SerializeField] private GameObject   _agentPrefab;
     [Header("UI")]
     [SerializeField] private Button       _changeModeButton;
     [SerializeField] private Text         _activeModeLabel;
 #pragma warning restore 0649
+    protected AgentPath      Path{ get; private set; }
     //      Internal
-    private   GraphTestModes _mode;
-    protected int               _pathStartNodeId;
-    protected int               _pathTargetNodeId;
-    protected AgentPath         _path;
+    private   GraphTestModes          _mode;
+    private   GraphTestAgentComponent _agentComponent;
+    protected int                     _pathStartNodeId;
+    protected int                     _pathTargetNodeId;
 
 
     //  METHODS
@@ -84,6 +86,29 @@ public abstract class GraphTestBase : MonoBehaviour
         }
     }
 
+    protected void SetPath(AgentPath path)
+    {
+        Path = path;
+
+        if (Path!= null)
+        {
+            if (_agentComponent == null)
+            {
+                GameObject agentObject = Instantiate(_agentPrefab, _nodeContainer.transform);
+                _agentComponent        = agentObject.GetComponent<GraphTestAgentComponent>();
+                _agentComponent.SetTest(this);
+            }
+            _agentComponent.SetPath(Path);
+        }
+        else
+        {
+            if (_agentComponent != null)
+            {
+                Destroy(_agentComponent.gameObject);
+            }
+        }
+    }
+
     abstract protected void EditModeInit();
     abstract protected void EditModeUpdate();
     abstract protected void EditModePostRender();
@@ -95,7 +120,7 @@ public abstract class GraphTestBase : MonoBehaviour
     abstract protected void PathFindModePostRender();
     abstract protected void PathFindModeUninit();
     
-    abstract protected GraphTestNodeComponent GetNodeComponent(int nodeId);
+    abstract public GraphTestNodeComponent GetNodeComponent(int nodeId);
 
     private void PathFindModeUpdate()
     {

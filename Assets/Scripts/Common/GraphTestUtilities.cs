@@ -62,10 +62,9 @@ public static class GraphTestUtilities
         edgeMaterial.SetPass(0);
         GL.Begin(GL.LINES);
 
-        IEnumerator<GraphConnection> connections = path.Connections.GetEnumerator();
-        while (connections.MoveNext() == true)
+        for (int i = 0; i < path.ConnectionCount; i++)
         {
-            DrawEdge(graph, connections.Current, matrix);
+            DrawEdge(graph, path.Getconnection(i), matrix);
         }
 
         GL.End();

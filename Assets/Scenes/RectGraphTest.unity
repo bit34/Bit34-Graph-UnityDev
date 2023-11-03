@@ -700,6 +700,8 @@ MonoBehaviour:
   _dynamicEdgeMaterial: {fileID: 2100000, guid: 40964ff5a860c44498a2a16791c4f46f,
     type: 2}
   _pathEdgeMaterial: {fileID: 2100000, guid: ed70dc52ec17848729d629583c40de13, type: 2}
+  _agentPrefab: {fileID: 5100921520599782028, guid: a9f41852588f24446bb9d3234fcbc59a,
+    type: 3}
   _changeModeButton: {fileID: 2077790969}
   _activeModeLabel: {fileID: 993859668}
   _editGraphPanel: {fileID: 446106880}

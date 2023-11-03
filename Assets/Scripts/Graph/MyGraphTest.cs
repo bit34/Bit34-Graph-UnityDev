@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Com.Bit34Games.Graphs;
 
 public class MyGraphTest : GraphTestBase
 {
     //  MEMBERS
     //      Internal
-    private MyGraph             _graph;
-    private MyAgent             _agent;
-    private MyAgentPathConfig   _pathConfig;
+    private MyGraph           _graph;
+    private MyAgent           _agent;
+    private MyAgentPathConfig _pathConfig;
 
 
     //  METHODS
@@ -93,35 +92,31 @@ public class MyGraphTest : GraphTestBase
 
     override protected void PathFindModeInit()
     {
-        _path = null;
+        SetPath(null);
     }
 
     override protected void PathFindUpdatePath()
     {
-        _path = new AgentPath();
-        if (_agent.FindPath(_pathStartNodeId, _pathTargetNodeId, _pathConfig, _path)==false)
-        {
-            _path = null;
-        }
+        SetPath(_agent.FindPath(_pathStartNodeId, _pathTargetNodeId, _pathConfig));
     }
     
     override protected void PathFindClearPath()
     {
-        _path = null;
+        SetPath(null);
     }
 
     override protected void PathFindModePostRender()
     {
         GraphTestUtilities.DrawDynamicEdges(_graph, DynamicEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
-        if (_path!=null)
+        if (Path!=null)
         {
-            GraphTestUtilities.DrawPath(_graph, _path, PathEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
+            GraphTestUtilities.DrawPath(_graph, Path, PathEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
         }
     }
 
     override protected void PathFindModeUninit() { }
 
-    override protected GraphTestNodeComponent GetNodeComponent(int nodeId)
+    override public GraphTestNodeComponent GetNodeComponent(int nodeId)
     {
         return _graph.GetNode(nodeId).component;
     }
