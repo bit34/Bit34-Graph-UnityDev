@@ -54,7 +54,7 @@ public static class GraphTestUtilities
         GL.End();
     }
 
-    static public void DrawPath<TConfig, TNode, TConnection>(Graph<TConfig, TNode, TConnection> graph, AgentPath path, Material edgeMaterial, Matrix4x4 matrix)
+    static public void DrawPath<TConfig, TNode, TConnection>(Graph<TConfig, TNode, TConnection> graph, Path path, Material edgeMaterial, Matrix4x4 matrix)
         where TConfig : GraphConfig<TNode>
         where TNode : GraphNode, IGraphNodeForUnity
         where TConnection : GraphConnection

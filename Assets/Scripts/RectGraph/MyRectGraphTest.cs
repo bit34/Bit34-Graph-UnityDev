@@ -21,7 +21,7 @@ public class MyRectGraphTest : GraphTestBase
     private bool                  _uiInitialized;
     private MyRectGraph           _graph;
     private MyRectAgent           _agent;
-    private MyRectAgentPathConfig _pathConfig;
+    private MyRectPathConfig _pathConfig;
 
 
     //  METHODS
@@ -74,7 +74,7 @@ public class MyRectGraphTest : GraphTestBase
         _agent = new MyRectAgent();
         _graph.AddAgent(_agent);
 
-        _pathConfig = new MyRectAgentPathConfig(IsEdgeAccesible);
+        _pathConfig = new MyRectPathConfig(IsEdgeAccesible);
     }
 
     private void CreateNodeObjects()

@@ -5,7 +5,7 @@ public class GraphTestAgentComponent : MonoBehaviour
 {
     //  MEMBERS
     private GraphTestBase _test;
-    private AgentPath     _path;
+    private Path     _path;
     private int           _currentConnection;
     private float         _currentProgress;
 
@@ -15,7 +15,7 @@ public class GraphTestAgentComponent : MonoBehaviour
         _test = test;
     }
 
-    public void SetPath(AgentPath path)
+    public void SetPath(Path path)
     {
         _path              = path;
         _currentConnection = 0;

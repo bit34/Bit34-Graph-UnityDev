@@ -8,7 +8,7 @@ public class MyGraphTest : GraphTestBase
     //      Internal
     private MyGraph           _graph;
     private MyAgent           _agent;
-    private MyAgentPathConfig _pathConfig;
+    private MyPathConfig _pathConfig;
 
 
     //  METHODS
@@ -38,7 +38,7 @@ public class MyGraphTest : GraphTestBase
             _agent = new MyAgent();
             _graph.AddAgent(_agent);
 
-            _pathConfig = new MyAgentPathConfig();
+            _pathConfig = new MyPathConfig();
         }
     }
 

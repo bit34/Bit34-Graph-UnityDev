@@ -25,7 +25,7 @@ public abstract class GraphTestBase : MonoBehaviour
     [SerializeField] private Button       _changeModeButton;
     [SerializeField] private Text         _activeModeLabel;
 #pragma warning restore 0649
-    protected AgentPath      Path{ get; private set; }
+    protected Path      Path{ get; private set; }
     //      Internal
     private   GraphTestModes          _mode;
     private   GraphTestAgentComponent _agentComponent;
@@ -86,7 +86,7 @@ public abstract class GraphTestBase : MonoBehaviour
         }
     }
 
-    protected void SetPath(AgentPath path)
+    protected void SetPath(Path path)
     {
         Path = path;
 
