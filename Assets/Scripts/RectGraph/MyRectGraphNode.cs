@@ -1,11 +1,11 @@
 using Com.Bit34Games.Graphs;
 using UnityEngine;
 
-public class MyRectGraphNode : RectGraphNode, IGraphNodeForUnity
+public class MyRectGraphNode : RectGraphNode, IGraphNode
 {
     //  MEMBERS
     public Vector3                position;
-    public GraphTestNodeComponent component;
+    public NodeComponent component;
     public bool                   isAccesible;
 
     //  METHODS

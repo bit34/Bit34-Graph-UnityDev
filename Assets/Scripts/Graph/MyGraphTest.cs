@@ -6,8 +6,8 @@ public class MyGraphTest : GraphTestBase
 {
     //  MEMBERS
     //      Internal
-    private MyGraph           _graph;
-    private MyAgent           _agent;
+    private MyGraph      _graph;
+    private MyAgent      _agent;
     private MyPathConfig _pathConfig;
 
 
@@ -23,9 +23,9 @@ public class MyGraphTest : GraphTestBase
 
             for (int i = 0; i < NodeContainer.transform.childCount; i++)
             {
-                GameObject             nodeObject    = NodeContainer.transform.GetChild(i).gameObject;
-                GraphTestNodeComponent nodeComponent = nodeObject.GetComponent<GraphTestNodeComponent>();
-                MyGraphNode            node          = _graph.CreateNode();
+                GameObject    nodeObject    = NodeContainer.transform.GetChild(i).gameObject;
+                NodeComponent nodeComponent = nodeObject.GetComponent<NodeComponent>();
+                MyGraphNode   node          = _graph.CreateNode();
 
                 node.component = nodeComponent;
                 node.position  = nodeComponent.transform.position;
@@ -34,6 +34,9 @@ public class MyGraphTest : GraphTestBase
 
                 ConnectNodeToOthers(node);
             }
+
+            ClearConnectionObjects();
+            CreateConnectionObjects<MyGraphConfig, MyGraphNode, MyGraphConnection>(_graph);
 
             _agent = new MyAgent();
             _graph.AddAgent(_agent);
@@ -52,18 +55,21 @@ public class MyGraphTest : GraphTestBase
 
             if (hitSomething)
             {
-                GraphTestNodeComponent nodeComponent = hit.collider.GetComponent<GraphTestNodeComponent>();
+                NodeComponent nodeComponent = hit.collider.GetComponent<NodeComponent>();
                 if (nodeComponent!=null)
                 {
                     _graph.DeleteNode(nodeComponent.Node.Id);
                     Destroy(nodeComponent.gameObject);
+
+                    ClearConnectionObjects();
+                    CreateConnectionObjects<MyGraphConfig, MyGraphNode, MyGraphConnection>(_graph);
                 }
             }
             else
             {
                 Vector3                nodePosition  = Camera.main.ScreenToWorldPoint(Input.mousePosition+new Vector3(0,0,-Camera.main.transform.position.z));
                 GameObject             nodeObject    = Instantiate(NodePrefab, NodeContainer.transform);
-                GraphTestNodeComponent nodeComponent = nodeObject.GetComponent<GraphTestNodeComponent>();
+                NodeComponent nodeComponent = nodeObject.GetComponent<NodeComponent>();
                 MyGraphNode            node          = _graph.CreateNode();
 
                 nodeObject.transform.position = nodePosition;
@@ -74,13 +80,11 @@ public class MyGraphTest : GraphTestBase
                 nodeComponent.Init(node, node.Id.ToString());
 
                 ConnectNodeToOthers(node);
+
+                ClearConnectionObjects();
+                CreateConnectionObjects<MyGraphConfig, MyGraphNode, MyGraphConnection>(_graph);
             }
         }
-    }
-
-    override protected void EditModePostRender()
-    {
-        GraphTestUtilities.DrawDynamicEdges(_graph, DynamicEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
     }
 
     override protected void EditModeUninit() {}
@@ -105,18 +109,9 @@ public class MyGraphTest : GraphTestBase
         SetPath(null);
     }
 
-    override protected void PathFindModePostRender()
-    {
-        GraphTestUtilities.DrawDynamicEdges(_graph, DynamicEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
-        if (Path!=null)
-        {
-            GraphTestUtilities.DrawPath(_graph, Path, PathEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
-        }
-    }
-
     override protected void PathFindModeUninit() { }
 
-    override public GraphTestNodeComponent GetNodeComponent(int nodeId)
+    override public NodeComponent GetNodeComponent(int nodeId)
     {
         return _graph.GetNode(nodeId).component;
     }

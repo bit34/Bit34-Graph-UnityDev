@@ -18,9 +18,9 @@ public class MyRectGraphTest : GraphTestBase
     [SerializeField] private Toggle     _hasDiagonalEdgesToggle;
 #pragma warning restore 0649
     //      Internal
-    private bool                  _uiInitialized;
-    private MyRectGraph           _graph;
-    private MyRectAgent           _agent;
+    private bool             _uiInitialized;
+    private MyRectGraph      _graph;
+    private MyRectAgent      _agent;
     private MyRectPathConfig _pathConfig;
 
 
@@ -46,30 +46,27 @@ public class MyRectGraphTest : GraphTestBase
     }
 
     override protected void EditModeUpdate() { }
-    
-    override protected void EditModePostRender()
-    {
-        GraphTestUtilities.DrawStaticEdges( _graph, StaticEdgeMaterial,  NodeContainer.transform.localToWorldMatrix);
-    }
 
     override protected void EditModeUninit() { }
 
     private void CreateRectangleGraph()
     {
-        DestroyNodeObjects();
+        ClearNodeObjects();
 
-        int columnCount = (int)_columnCountSlider.value;
-        int rowCount    = (int)_rowCountSlider.value;
-        MyRectGraphConfig config = new MyRectGraphConfig(Vector3.right, 
-                                                         Vector3.up, 
-                                                         false, 
-                                                         _hasStraghtEdgesToggle.isOn, 
-                                                         _hasDiagonalEdgesToggle.isOn);
+        int               columnCount = (int)_columnCountSlider.value;
+        int               rowCount    = (int)_rowCountSlider.value;
+        MyRectGraphConfig config      = new MyRectGraphConfig(Vector3.right, 
+                                                              Vector3.up, 
+                                                              false, 
+                                                              _hasStraghtEdgesToggle.isOn, 
+                                                              _hasDiagonalEdgesToggle.isOn);
         _columnCountLabel.text = "Columns : " + columnCount;
         _rowCountLabel.text    = "Rows : "    + rowCount;
         _graph = new MyRectGraph(columnCount, rowCount, config);
 
         CreateNodeObjects();
+        ClearConnectionObjects();
+        CreateConnectionObjects<MyRectGraphConfig, MyRectGraphNode, MyRectGraphConnection>(_graph);
 
         _agent = new MyRectAgent();
         _graph.AddAgent(_agent);
@@ -87,7 +84,7 @@ public class MyRectGraphTest : GraphTestBase
             {
                 MyRectGraphNode        node          = _graph.GetNodeByLocation(c,r);
                 GameObject             nodeObject    = Instantiate(NodePrefab, NodeContainer.transform);
-                GraphTestNodeComponent nodeComponent = nodeObject.GetComponent<GraphTestNodeComponent>();
+                NodeComponent nodeComponent = nodeObject.GetComponent<NodeComponent>();
                 
                 nodeObject.transform.localPosition = node.position;
 
@@ -110,7 +107,7 @@ public class MyRectGraphTest : GraphTestBase
 
     }
 
-    private void DestroyNodeObjects()
+    private void ClearNodeObjects()
     {
         while (NodeContainer.transform.childCount>0)
         {
@@ -139,18 +136,9 @@ public class MyRectGraphTest : GraphTestBase
         SetPath(null);
     }
 
-    override protected void PathFindModePostRender()
-    {
-        GraphTestUtilities.DrawStaticEdges(_graph,  StaticEdgeMaterial,  NodeContainer.transform.localToWorldMatrix);
-        if (Path!=null)
-        {
-            GraphTestUtilities.DrawPath(_graph, Path, PathEdgeMaterial, NodeContainer.transform.localToWorldMatrix);
-        }
-    }
-
     override protected void PathFindModeUninit( ) { }
 
-    override public GraphTestNodeComponent GetNodeComponent(int nodeId)
+    override public NodeComponent GetNodeComponent(int nodeId)
     {
         return _graph.GetNode(nodeId).component;
     }

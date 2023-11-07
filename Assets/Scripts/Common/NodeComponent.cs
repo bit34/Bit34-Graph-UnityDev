@@ -2,7 +2,7 @@ using UnityEngine;
 using Com.Bit34Games.Graphs;
 
 
-public class GraphTestNodeComponent : MonoBehaviour
+public class NodeComponent : MonoBehaviour
 {
     //  MEMBERS
     public int NodeId { get{ return Node.Id; } }

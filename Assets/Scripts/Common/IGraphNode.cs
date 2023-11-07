@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IGraphNodeForUnity
+public interface IGraphNode
 {
     //  MEMBERS
     Vector3 GetPosition();
