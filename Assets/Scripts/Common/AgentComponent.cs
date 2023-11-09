@@ -4,13 +4,13 @@ using UnityEngine;
 public class AgentComponent : MonoBehaviour
 {
     //  MEMBERS
-    private GraphTestBase _test;
-    private Path          _path;
-    private int           _currentPathConnection;
-    private float         _currentPathConnectionProgress;
+    private IGraphTest _test;
+    private Path       _path;
+    private int        _pathCurrentConnection;
+    private float      _pathCurrentConnectionProgress;
 
     //  METHODS
-    public void SetTest(GraphTestBase test)
+    public void SetTest(IGraphTest test)
     {
         _test = test;
     }
@@ -18,8 +18,8 @@ public class AgentComponent : MonoBehaviour
     public void SetPath(Path path)
     {
         _path = path;
-        _currentPathConnection = 0;
-        _currentPathConnectionProgress = 0;
+        _pathCurrentConnection = 0;
+        _pathCurrentConnectionProgress = 0;
 
         transform.position = _test.GetNodeComponent(_path.startNodeId).transform.position;
     }
@@ -28,26 +28,25 @@ public class AgentComponent : MonoBehaviour
     {
         if (_path != null)
         {
-            _currentPathConnectionProgress += Time.deltaTime;
+            _pathCurrentConnectionProgress += Time.deltaTime;
 
-            if (_currentPathConnectionProgress >= 1)
+            if (_pathCurrentConnectionProgress >= 1)
             {
-                _currentPathConnectionProgress = 0;
+                _pathCurrentConnectionProgress = 0;
 
-                _currentPathConnection++;
+                _pathCurrentConnection++;
 
-                if (_currentPathConnection == _path.ConnectionCount)
+                if (_pathCurrentConnection == _path.ConnectionCount)
                 {
-                    _currentPathConnection = 0;
+                    _pathCurrentConnection = 0;
                 }
             }
 
-            GraphConnection connection = _path.Getconnection(_currentPathConnection);
+            GraphConnection connection        = _path.Getconnection(_pathCurrentConnection);
+            Vector3         startNodePosition = _test.GetNodeComponent(connection.SourceNodeId).transform.position;
+            Vector3         endNodePosition   = _test.GetNodeComponent(connection.TargetNodeId).transform.position;
 
-            Vector3 startNodePosition = _test.GetNodeComponent(connection.SourceNodeId).transform.position;
-            Vector3 endNodePosition   = _test.GetNodeComponent(connection.TargetNodeId).transform.position;
-
-            transform.position = Vector3.Lerp(startNodePosition, endNodePosition, _currentPathConnectionProgress);
+            transform.position = Vector3.Lerp(startNodePosition, endNodePosition, _pathCurrentConnectionProgress);
         }
 
     }

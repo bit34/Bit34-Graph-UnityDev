@@ -5,14 +5,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public abstract class GraphTestBase : MonoBehaviour
+public abstract class GraphTest : MonoBehaviour, IGraphTest
 {
     //  MEMBERS
-    protected GameObject NodeContainer       { get { return _nodeContainer;       } }
-    protected GameObject NodePrefab          { get { return _nodePrefab;          } }
-    protected Material   StaticEdgeMaterial  { get { return _staticEdgeMaterial;  } }
-    protected Material   DynamicEdgeMaterial { get { return _dynamicEdgeMaterial; } }
-    protected Material   PathEdgeMaterial    { get { return _pathEdgeMaterial;    } }
+    protected GameObject NodeContainer { get { return _nodeContainer; } }
+    protected GameObject NodePrefab    { get { return _nodePrefab;    } }
     //      For Editor
 #pragma warning disable 0649
     [SerializeField] private GameObject   _nodeContainer;
@@ -28,7 +25,7 @@ public abstract class GraphTestBase : MonoBehaviour
     [SerializeField] private Button       _changeModeButton;
     [SerializeField] private Text         _activeModeLabel;
 #pragma warning restore 0649
-    protected Path      Path{ get; private set; }
+    protected Path Path{ get; private set; }
     //      Internal
     private   GraphTestModes _mode;
     private   AgentComponent _agentComponent;

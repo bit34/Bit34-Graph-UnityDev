@@ -1,4 +1,3 @@
 using Com.Bit34Games.Graphs;
 
-public class MyAgent : Agent<MyGraphNode, MyGraphConnection>
-{}
+public class MyAgent : Agent<MyGraphNode, MyGraphConnection>{}

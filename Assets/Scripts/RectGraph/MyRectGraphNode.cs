@@ -4,9 +4,9 @@ using UnityEngine;
 public class MyRectGraphNode : RectGraphNode, IGraphNode
 {
     //  MEMBERS
-    public Vector3                position;
+    public Vector3       position;
     public NodeComponent component;
-    public bool                   isAccesible;
+    public bool          isAccesible;
 
     //  METHODS
     public Vector3 GetPosition() { return position; }

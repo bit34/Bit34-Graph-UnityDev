@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MyGraphTest : GraphTestBase
+public class MyGraphTest : GraphTest
 {
     //  MEMBERS
     //      Internal
@@ -17,7 +17,7 @@ public class MyGraphTest : GraphTestBase
 
     override protected void EditModeInit()
     {
-        if (_graph==null)
+        if (_graph == null)
         {
             _graph = new MyGraph();
 

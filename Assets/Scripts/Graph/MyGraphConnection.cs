@@ -1,4 +1,3 @@
 using Com.Bit34Games.Graphs;
 
-public class MyGraphConnection : GraphConnection
-{}
+public class MyGraphConnection : GraphConnection{}

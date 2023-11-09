@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using Com.Bit34Games.Graphs;
 
 
-public class MyRectGraphTest : GraphTestBase
+public class MyRectGraphTest : GraphTest
 {
     //  MEMBERS
     //      For Editor
