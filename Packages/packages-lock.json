@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.bit34games.graph": {
+      "version": "ssh://git@github.com/bit34/Bit34-Graph-UPM.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "7d8ad6a0d31e4ffdd26739c11d27a0a088351122"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
