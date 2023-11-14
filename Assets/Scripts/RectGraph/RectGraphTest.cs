@@ -3,22 +3,15 @@ using UnityEngine.UI;
 using Com.Bit34Games.Graphs;
 
 
-public class MyRectGraphTest : GraphTest
+public class RectGraphTest : GraphTestBase
 {
     //  MEMBERS
     //      For Editor
 #pragma warning disable 0649
-    [Header("Rectangle")]
-    [SerializeField] private GameObject _editGraphPanel;
-    [SerializeField] private Text       _columnCountLabel;
-    [SerializeField] private Slider     _columnCountSlider;
-    [SerializeField] private Text       _rowCountLabel;
-    [SerializeField] private Slider     _rowCountSlider;
-    [SerializeField] private Toggle     _hasStraghtEdgesToggle;
-    [SerializeField] private Toggle     _hasDiagonalEdgesToggle;
+    [Header("Rectangle Test")]
+    [SerializeField] private RectGraphEditPanel _editPanel;
 #pragma warning restore 0649
-    //      Internal
-    private bool             _uiInitialized;
+    //      Private
     private MyRectGraph      _graph;
     private MyRectAgent      _agent;
     private MyRectPathConfig _pathConfig;
@@ -30,38 +23,30 @@ public class MyRectGraphTest : GraphTest
 
     override protected void EditModeInit()
     {
-        _editGraphPanel.SetActive(true);
-
-        if (_uiInitialized==false)
-        {
-            _uiInitialized = true;
-            
-            _columnCountSlider.onValueChanged.AddListener((float value)=>{ CreateRectangleGraph(); });
-            _rowCountSlider.onValueChanged.AddListener((float value)=>{ CreateRectangleGraph(); });
-            _hasStraghtEdgesToggle.onValueChanged.AddListener((bool value)=>{ CreateRectangleGraph(); });
-            _hasDiagonalEdgesToggle.onValueChanged.AddListener((bool value)=>{ CreateRectangleGraph(); });
-        }
+        _editPanel.Initialize(CreateRectangleGraph);
+        _editPanel.Show(true);
 
         CreateRectangleGraph();
     }
 
     override protected void EditModeUpdate() { }
 
-    override protected void EditModeUninit() { }
+    override protected void EditModeUninit()
+    {
+        _editPanel.Show(false);
+    }
 
     private void CreateRectangleGraph()
     {
         ClearNodeObjects();
 
-        int               columnCount = (int)_columnCountSlider.value;
-        int               rowCount    = (int)_rowCountSlider.value;
+        int               columnCount = (int)_editPanel.ColumnCount;
+        int               rowCount    = (int)_editPanel.RowCount;
         MyRectGraphConfig config      = new MyRectGraphConfig(Vector3.right, 
                                                               Vector3.up, 
                                                               false, 
-                                                              _hasStraghtEdgesToggle.isOn, 
-                                                              _hasDiagonalEdgesToggle.isOn);
-        _columnCountLabel.text = "Columns : " + columnCount;
-        _rowCountLabel.text    = "Rows : "    + rowCount;
+                                                              _editPanel.StraightConnections, 
+                                                              _editPanel.DiagonalConnections);
         _graph = new MyRectGraph(columnCount, rowCount, config);
 
         CreateNodeObjects();
@@ -71,7 +56,7 @@ public class MyRectGraphTest : GraphTest
         _agent = new MyRectAgent();
         _graph.AddAgent(_agent);
 
-        _pathConfig = new MyRectPathConfig(IsEdgeAccesible);
+        _pathConfig = new MyRectPathConfig(IsConnectionAccesible);
     }
 
     private void CreateNodeObjects()
@@ -82,9 +67,9 @@ public class MyRectGraphTest : GraphTest
         {
             for (int r = 0; r < _graph.rowCount; r++)
             {
-                MyRectGraphNode        node          = _graph.GetNodeByLocation(c,r);
-                GameObject             nodeObject    = Instantiate(NodePrefab, NodeContainer.transform);
-                NodeComponent nodeComponent = nodeObject.GetComponent<NodeComponent>();
+                MyRectGraphNode node          = _graph.GetNodeByLocation(c,r);
+                GameObject      nodeObject    = Instantiate(NodePrefab, NodeContainer.transform);
+                NodeComponent   nodeComponent = nodeObject.GetComponent<NodeComponent>();
                 
                 nodeObject.transform.localPosition = node.position;
 
@@ -122,7 +107,6 @@ public class MyRectGraphTest : GraphTest
 
     override protected void PathFindModeInit()
     {
-        _editGraphPanel.SetActive(false);
         SetPath(null);
     }
 
@@ -145,7 +129,7 @@ public class MyRectGraphTest : GraphTest
     
 #endregion
 
-    private bool IsEdgeAccesible(GraphConnection connection, IAgentPathOwner pathOwner)
+    private bool IsConnectionAccesible(GraphConnection connection, IAgentPathOwner pathOwner)
     {
         return _graph.GetNode(connection.TargetNodeId).isAccesible;
     }

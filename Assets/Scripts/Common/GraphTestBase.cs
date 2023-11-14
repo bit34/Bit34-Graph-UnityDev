@@ -5,28 +5,30 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public abstract class GraphTest : MonoBehaviour, IGraphTest
+public abstract class GraphTestBase : MonoBehaviour, IGraphTest
 {
     //  MEMBERS
     protected GameObject NodeContainer { get { return _nodeContainer; } }
-    protected GameObject NodePrefab    { get { return _nodePrefab;    } }
+    protected GameObject NodePrefab    { get { return _nodePrefab; } }
+    protected Path       Path          { get; private set; }
     //      For Editor
 #pragma warning disable 0649
-    [SerializeField] private GameObject   _nodeContainer;
+    [Header("Resource references")]
     [SerializeField] private GameObject   _nodePrefab;
-    [SerializeField] private Transform    _connectionContainer;
     [SerializeField] private GameObject   _connectionPrefab;
-    [SerializeField] private Transform    _pathContainer;
-    [SerializeField] private Material     _staticEdgeMaterial;
-    [SerializeField] private Material     _dynamicEdgeMaterial;
-    [SerializeField] private Material     _pathEdgeMaterial;
     [SerializeField] private GameObject   _agentPrefab;
-    [Header("UI")]
+    [Header("Scene references")]
+    [SerializeField] private GameObject   _nodeContainer;
+    [SerializeField] private Transform    _connectionContainer;
+    [SerializeField] private Transform    _pathContainer;
+    [SerializeField] private Material     _staticConnectionMaterial;
+    [SerializeField] private Material     _dynamicConnectionMaterial;
+    [SerializeField] private Material     _pathConnectionMaterial;
+    [Header("UI References")]
     [SerializeField] private Button       _changeModeButton;
     [SerializeField] private Text         _activeModeLabel;
 #pragma warning restore 0649
-    protected Path Path{ get; private set; }
-    //      Internal
+    //      Private
     private   GraphTestModes _mode;
     private   AgentComponent _agentComponent;
     protected int            _pathStartNodeId;
@@ -210,7 +212,7 @@ public abstract class GraphTest : MonoBehaviour, IGraphTest
         for (int c = 0; c < Path.ConnectionCount; c++)
         {
             GraphConnection connection = Path.Getconnection(c);
-            CreateConnectionObject(connection, _pathContainer, _pathEdgeMaterial, true);
+            CreateConnectionObject(connection, _pathContainer, _pathConnectionMaterial, true);
         }
     }
 
@@ -239,7 +241,7 @@ public abstract class GraphTest : MonoBehaviour, IGraphTest
                 GraphConnection connection = connections.Current;
                 if (connection.SourceNodeId < connection.TargetNodeId)
                 {
-                    CreateConnectionObject(connection, _connectionContainer, _dynamicEdgeMaterial, false);
+                    CreateConnectionObject(connection, _connectionContainer, _dynamicConnectionMaterial, false);
                 }
             }
 
@@ -248,7 +250,7 @@ public abstract class GraphTest : MonoBehaviour, IGraphTest
                 GraphConnection connection = node.GetStaticConnection(i);
                 if (connection !=null && connection.SourceNodeId < connection.TargetNodeId)
                 {
-                    CreateConnectionObject(connection, _connectionContainer, _staticEdgeMaterial, false);
+                    CreateConnectionObject(connection, _connectionContainer, _staticConnectionMaterial, false);
                 }
             }
         }

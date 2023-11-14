@@ -18,7 +18,7 @@ public class ConnectionComponent : MonoBehaviour
         }
         else
         {
-            lineObject.transform.localScale = new Vector3(direction.magnitude, 1, 1);
+            lineObject.transform.localScale = new Vector3(direction.magnitude, 0.5f, 0.5f);
         }
 
         lineObject.GetComponent<SpriteRenderer>().material = material;

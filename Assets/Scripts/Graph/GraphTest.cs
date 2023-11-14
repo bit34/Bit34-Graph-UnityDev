@@ -2,10 +2,10 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MyGraphTest : GraphTest
+public class GraphTest : GraphTestBase
 {
     //  MEMBERS
-    //      Internal
+    //      Private
     private MyGraph      _graph;
     private MyAgent      _agent;
     private MyPathConfig _pathConfig;

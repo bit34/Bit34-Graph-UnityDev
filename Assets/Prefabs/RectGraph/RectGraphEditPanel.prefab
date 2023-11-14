@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 8169880853058545225}
   - component: {fileID: 8169880853058545224}
   m_Layer: 5
-  m_Name: DiagonalEdgesToggle
+  m_Name: DiagonalConnectionsToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -361,7 +361,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Straight Edges
+  m_Text: Straight
 --- !u!1 &8169880853386002889
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,7 +869,7 @@ GameObject:
   - component: {fileID: 8169880854268594909}
   - component: {fileID: 8169880854268594908}
   m_Layer: 5
-  m_Name: StraightEdgesToggle
+  m_Name: StraightConnectionsToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -954,6 +954,7 @@ GameObject:
   - component: {fileID: 8169880854270359524}
   - component: {fileID: 8169880854270359526}
   - component: {fileID: 8169880854270359527}
+  - component: {fileID: 6689031343065604513}
   m_Layer: 5
   m_Name: RectGraphEditPanel
   m_TagString: Untagged
@@ -1023,6 +1024,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6689031343065604513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8169880854270359525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 354a139717c7a43158647432ca33d583, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _columnCountLabel: {fileID: 8169880854385859629}
+  _columnCountSlider: {fileID: 8169880852888153969}
+  _rowCountLabel: {fileID: 8169880854391335641}
+  _rowCountSlider: {fileID: 8169880853678537598}
+  _hasStraghtConnectionsToggle: {fileID: 8169880854268594908}
+  _hasDiagonalConectionsToggle: {fileID: 8169880853058545224}
 --- !u!1 &8169880854270653317
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,7 +1570,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Diagonal Edges
+  m_Text: Diagonal
 --- !u!1 &8169880854703975204
 GameObject:
   m_ObjectHideFlags: 0
