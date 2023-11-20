@@ -25,18 +25,18 @@ public class GraphTest : GraphTestBase
             {
                 GameObject    nodeObject    = NodeContainer.transform.GetChild(i).gameObject;
                 NodeComponent nodeComponent = nodeObject.GetComponent<NodeComponent>();
-                MyGraphNode   node          = _graph.CreateNode();
+                MyNode        node          = _graph.CreateNode();
 
                 node.component = nodeComponent;
                 node.position  = nodeComponent.transform.position;
 
-                nodeComponent.Init(node, node.Id.ToString());
+                nodeComponent.Init(node.Id, node.Id.ToString());
 
                 ConnectNodeToOthers(node);
             }
 
-            ClearConnectionObjects();
-            CreateConnectionObjects<MyGraphConfig, MyGraphNode, MyGraphConnection>(_graph);
+            ClearEdgeObjects();
+            CreateEdgeObjects<MyGraphConfig, MyNode, MyEdge>(_graph);
 
             _agent = new MyAgent();
             _graph.AddAgent(_agent);
@@ -58,11 +58,11 @@ public class GraphTest : GraphTestBase
                 NodeComponent nodeComponent = hit.collider.GetComponent<NodeComponent>();
                 if (nodeComponent!=null)
                 {
-                    _graph.DeleteNode(nodeComponent.Node.Id);
+                    _graph.DeleteNode(nodeComponent.NodeId);
                     Destroy(nodeComponent.gameObject);
 
-                    ClearConnectionObjects();
-                    CreateConnectionObjects<MyGraphConfig, MyGraphNode, MyGraphConnection>(_graph);
+                    ClearEdgeObjects();
+                    CreateEdgeObjects<MyGraphConfig, MyNode, MyEdge>(_graph);
                 }
             }
             else
@@ -70,19 +70,19 @@ public class GraphTest : GraphTestBase
                 Vector3                nodePosition  = Camera.main.ScreenToWorldPoint(Input.mousePosition+new Vector3(0,0,-Camera.main.transform.position.z));
                 GameObject             nodeObject    = Instantiate(NodePrefab, NodeContainer.transform);
                 NodeComponent nodeComponent = nodeObject.GetComponent<NodeComponent>();
-                MyGraphNode            node          = _graph.CreateNode();
+                MyNode            node          = _graph.CreateNode();
 
                 nodeObject.transform.position = nodePosition;
 
                 node.component = nodeComponent;
                 node.position  = nodePosition;
 
-                nodeComponent.Init(node, node.Id.ToString());
+                nodeComponent.Init(node.Id, node.Id.ToString());
 
                 ConnectNodeToOthers(node);
 
-                ClearConnectionObjects();
-                CreateConnectionObjects<MyGraphConfig, MyGraphNode, MyGraphConnection>(_graph);
+                ClearEdgeObjects();
+                CreateEdgeObjects<MyGraphConfig, MyNode, MyEdge>(_graph);
             }
         }
     }
@@ -118,13 +118,13 @@ public class GraphTest : GraphTestBase
     
 #endregion
 
-    private void ConnectNodeToOthers(MyGraphNode sourceNode)
+    private void ConnectNodeToOthers(MyNode sourceNode)
     {
-        IEnumerator<MyGraphNode> nodes =_graph.GetNodeEnumerator();
+        IEnumerator<MyNode> nodes =_graph.GetNodeEnumerator();
 
         while (nodes.MoveNext())
         {
-            MyGraphNode node = nodes.Current;
+            MyNode node = nodes.Current;
 
             //  Skip self
             if (node == sourceNode)
@@ -133,7 +133,7 @@ public class GraphTest : GraphTestBase
             }
 
             //  skip if already connected
-            if (node.GetDynamicConnectionTo(sourceNode.Id)!=null)
+            if (node.GetDynamicEdgeTo(sourceNode.Id)!=null)
             {
                 continue;
             }

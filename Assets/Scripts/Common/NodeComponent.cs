@@ -5,8 +5,7 @@ using Com.Bit34Games.Graphs;
 public class NodeComponent : MonoBehaviour
 {
     //  MEMBERS
-    public int NodeId { get{ return Node.Id; } }
-    public GraphNode Node { get; private set; }
+    public int NodeId { get; private set; }
     //      For Editor
 #pragma warning disable 0649
     [SerializeField] private SphereCollider _collider;
@@ -20,10 +19,10 @@ public class NodeComponent : MonoBehaviour
 
 
     //  METHODS
-    public void Init(GraphNode node, string infoText)
+    public void Init(int nodeId, string infoText)
     {
-        Node = node;
-        gameObject.name = "Node" + node.Id;
+        NodeId = nodeId;
+        gameObject.name = "Node" + nodeId;
 
         _infoText.text = infoText;
     }

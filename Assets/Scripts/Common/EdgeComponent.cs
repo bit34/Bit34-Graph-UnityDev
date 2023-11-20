@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ConnectionComponent : MonoBehaviour
+public class EdgeComponent : MonoBehaviour
 {
     public GameObject lineObject;
 

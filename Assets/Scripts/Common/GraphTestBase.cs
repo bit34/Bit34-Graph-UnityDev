@@ -15,15 +15,15 @@ public abstract class GraphTestBase : MonoBehaviour, IGraphTest
 #pragma warning disable 0649
     [Header("Resource references")]
     [SerializeField] private GameObject   _nodePrefab;
-    [SerializeField] private GameObject   _connectionPrefab;
+    [SerializeField] private GameObject   _edgePrefab;
     [SerializeField] private GameObject   _agentPrefab;
     [Header("Scene references")]
     [SerializeField] private GameObject   _nodeContainer;
-    [SerializeField] private Transform    _connectionContainer;
+    [SerializeField] private Transform    _edgeContainer;
     [SerializeField] private Transform    _pathContainer;
-    [SerializeField] private Material     _staticConnectionMaterial;
-    [SerializeField] private Material     _dynamicConnectionMaterial;
-    [SerializeField] private Material     _pathConnectionMaterial;
+    [SerializeField] private Material     _staticEdgeMaterial;
+    [SerializeField] private Material     _dynamicEdgeMaterial;
+    [SerializeField] private Material     _pathEdgeMaterial;
     [Header("UI References")]
     [SerializeField] private Button       _changeModeButton;
     [SerializeField] private Text         _activeModeLabel;
@@ -92,7 +92,7 @@ public abstract class GraphTestBase : MonoBehaviour, IGraphTest
                 _agentComponent.SetTest(this);
             }
             
-            _agentComponent.SetPath(Path);
+            _agentComponent.SetPath(Path, 3);
 
             CreatePathObjects();
         }
@@ -209,59 +209,58 @@ public abstract class GraphTestBase : MonoBehaviour, IGraphTest
 
     private void CreatePathObjects()
     {
-        for (int c = 0; c < Path.ConnectionCount; c++)
+        for (int c = 0; c < Path.EdgeCount; c++)
         {
-            GraphConnection connection = Path.Getconnection(c);
-            CreateConnectionObject(connection, _pathContainer, _pathConnectionMaterial, true);
+            Edge edge = Path.GetEdge(c);
+            CreateEdgeObject(edge, _pathContainer, _pathEdgeMaterial, true);
         }
     }
 
-    protected void ClearConnectionObjects()
+    protected void ClearEdgeObjects()
     {
-        while (_connectionContainer.childCount>0)
+        while (_edgeContainer.childCount>0)
         {
-            DestroyImmediate(_connectionContainer.GetChild(0).gameObject);
+            DestroyImmediate(_edgeContainer.GetChild(0).gameObject);
         }
     }
 
-    protected void CreateConnectionObjects<TConfig, TNode, TConnection>(Graph<TConfig, TNode, TConnection> graph)
-        where TConfig : GraphConfig<TNode>
-        where TNode : GraphNode, IGraphNode
-        where TConnection : GraphConnection
+    protected void CreateEdgeObjects<TConfig, TNode, TEdge>(Graph<TConfig, TNode, TEdge> graph)
+        where TConfig : GraphConfig<TNode,TEdge>
+        where TNode : Node<TEdge>, IGraphNode
+        where TEdge : Edge
     {
-
         IEnumerator<TNode> nodes = graph.GetNodeEnumerator();
         while (nodes.MoveNext() == true)
         {
             TNode node = nodes.Current;
 
-            IEnumerator<GraphConnection>connections = node.GetDynamicConnectionEnumerator();
-            while(connections.MoveNext())
+            IEnumerator<Edge>edges = node.GetDynamicEdgeEnumerator();
+            while(edges.MoveNext())
             {
-                GraphConnection connection = connections.Current;
-                if (connection.SourceNodeId < connection.TargetNodeId)
+                Edge edge = edges.Current;
+                if (edge.SourceNodeId < edge.TargetNodeId)
                 {
-                    CreateConnectionObject(connection, _connectionContainer, _dynamicConnectionMaterial, false);
+                    CreateEdgeObject(edge, _edgeContainer, _dynamicEdgeMaterial, false);
                 }
             }
 
-            for (int i = 0; i < node.StaticConnectionCount; i++)
+            for (int i = 0; i < node.StaticEdgeCount; i++)
             {
-                GraphConnection connection = node.GetStaticConnection(i);
-                if (connection !=null && connection.SourceNodeId < connection.TargetNodeId)
+                Edge edge = node.GetStaticEdge(i);
+                if (edge !=null && edge.SourceNodeId < edge.TargetNodeId)
                 {
-                    CreateConnectionObject(connection, _connectionContainer, _staticConnectionMaterial, false);
+                    CreateEdgeObject(edge, _edgeContainer, _staticEdgeMaterial, false);
                 }
             }
         }
     }
 
-    private void CreateConnectionObject(GraphConnection connection, Transform container, Material material, bool isThick)
+    private void CreateEdgeObject(Edge edge, Transform container, Material material, bool isThick)
     {
-        GameObject             connectionObject    = Instantiate(_connectionPrefab, container);
-        ConnectionComponent    connectionComponent = connectionObject.GetComponent<ConnectionComponent>();
-        NodeComponent          startNodeComponent  = GetNodeComponent(connection.SourceNodeId);
-        NodeComponent          targetNodeComponent = GetNodeComponent(connection.TargetNodeId);
-        connectionComponent.Setup(startNodeComponent.transform.position, targetNodeComponent.transform.position, material, isThick);
+        GameObject    edgeObject          = Instantiate(_edgePrefab, container);
+        EdgeComponent edgeComponent       = edgeObject.GetComponent<EdgeComponent>();
+        NodeComponent startNodeComponent  = GetNodeComponent(edge.SourceNodeId);
+        NodeComponent targetNodeComponent = GetNodeComponent(edge.TargetNodeId);
+        edgeComponent.Setup(startNodeComponent.transform.position, targetNodeComponent.transform.position, material, isThick);
     }
 }

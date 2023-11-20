@@ -1,6 +1,6 @@
 using Com.Bit34Games.Graphs;
 
-public class MyGraphConfig : GraphConfig<MyGraphNode>
+public class MyGraphConfig : GraphConfig<MyNode, MyEdge>
 {
     //  CONSTRUCTOR
     public MyGraphConfig() : 
@@ -8,7 +8,7 @@ public class MyGraphConfig : GraphConfig<MyGraphNode>
     {}
 
     //  METHODS
-    override public float CalculateConnectionWeight(MyGraphNode sourceNode, MyGraphNode targetNode)
+    override public float CalculateEdgeWeight(MyNode sourceNode, MyNode targetNode)
     {
         return (targetNode.position - sourceNode.position).magnitude;
     }

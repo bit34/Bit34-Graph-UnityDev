@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 8169880853058545225}
   - component: {fileID: 8169880853058545224}
   m_Layer: 5
-  m_Name: DiagonalConnectionsToggle
+  m_Name: DiagonalEdgesToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -350,7 +350,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 23
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -361,7 +361,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Straight
+  m_Text: Straight Edges
 --- !u!1 &8169880853386002889
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,7 +869,7 @@ GameObject:
   - component: {fileID: 8169880854268594909}
   - component: {fileID: 8169880854268594908}
   m_Layer: 5
-  m_Name: StraightConnectionsToggle
+  m_Name: StraightEdgesToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1040,8 +1040,8 @@ MonoBehaviour:
   _columnCountSlider: {fileID: 8169880852888153969}
   _rowCountLabel: {fileID: 8169880854391335641}
   _rowCountSlider: {fileID: 8169880853678537598}
-  _hasStraghtConnectionsToggle: {fileID: 8169880854268594908}
-  _hasDiagonalConectionsToggle: {fileID: 8169880853058545224}
+  _hasStraghtEdgesToggle: {fileID: 8169880854268594908}
+  _hasDiagonalEdgesToggle: {fileID: 8169880853058545224}
 --- !u!1 &8169880854270653317
 GameObject:
   m_ObjectHideFlags: 0
@@ -1559,7 +1559,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 22
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -1570,7 +1570,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Diagonal
+  m_Text: Diagonal Edges
 --- !u!1 &8169880854703975204
 GameObject:
   m_ObjectHideFlags: 0

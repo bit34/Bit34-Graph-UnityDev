@@ -7,16 +7,16 @@ public class RectGraphEditPanel : MonoBehaviour
     //  MEMBERS
     public int  ColumnCount         { get { return (int)_columnCountSlider.value; } }
     public int  RowCount            { get { return (int)_rowCountSlider.value; } }
-    public bool StraightConnections { get { return _hasStraghtConnectionsToggle.isOn; } }
-    public bool DiagonalConnections { get { return _hasDiagonalConectionsToggle.isOn; } }
+    public bool StraightEdgess { get { return _hasStraghtEdgesToggle.isOn; } }
+    public bool DiagonalEdgess { get { return _hasDiagonalEdgesToggle.isOn; } }
     //      For Editor
 #pragma warning disable 0649
     [SerializeField] private Text   _columnCountLabel;
     [SerializeField] private Slider _columnCountSlider;
     [SerializeField] private Text   _rowCountLabel;
     [SerializeField] private Slider _rowCountSlider;
-    [SerializeField] private Toggle _hasStraghtConnectionsToggle;
-    [SerializeField] private Toggle _hasDiagonalConectionsToggle;
+    [SerializeField] private Toggle _hasStraghtEdgesToggle;
+    [SerializeField] private Toggle _hasDiagonalEdgesToggle;
 #pragma warning restore 0649
     //      Private
     private bool   _isInitialized;
@@ -35,8 +35,8 @@ public class RectGraphEditPanel : MonoBehaviour
 
         _columnCountSlider.onValueChanged.AddListener((float value)=>{ OnChanged(); });
         _rowCountSlider.onValueChanged.AddListener((float value)=>{ OnChanged(); });
-        _hasStraghtConnectionsToggle.onValueChanged.AddListener((bool value)=>{ OnChanged(); });
-        _hasDiagonalConectionsToggle.onValueChanged.AddListener((bool value)=>{ OnChanged(); });
+        _hasStraghtEdgesToggle.onValueChanged.AddListener((bool value)=>{ OnChanged(); });
+        _hasDiagonalEdgesToggle.onValueChanged.AddListener((bool value)=>{ OnChanged(); });
         
         _columnCountLabel.text = "Columns : " + ColumnCount;
         _rowCountLabel.text    = "Rows : "    + RowCount;

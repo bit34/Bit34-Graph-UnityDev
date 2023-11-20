@@ -6,8 +6,9 @@ public class AgentComponent : MonoBehaviour
     //  MEMBERS
     private IGraphTest _test;
     private Path       _path;
-    private int        _pathCurrentConnection;
-    private float      _pathCurrentConnectionProgress;
+    private int        _pathCurrentEdge;
+    private float      _pathCurrentEdgeProgress;
+    private float      _speed;
 
     //  METHODS
     public void SetTest(IGraphTest test)
@@ -15,11 +16,12 @@ public class AgentComponent : MonoBehaviour
         _test = test;
     }
 
-    public void SetPath(Path path)
+    public void SetPath(Path path, float speed)
     {
-        _path = path;
-        _pathCurrentConnection = 0;
-        _pathCurrentConnectionProgress = 0;
+        _path                    = path;
+        _pathCurrentEdge         = 0;
+        _pathCurrentEdgeProgress = 0;
+        _speed                   = speed;
 
         transform.position = _test.GetNodeComponent(_path.startNodeId).transform.position;
     }
@@ -28,25 +30,26 @@ public class AgentComponent : MonoBehaviour
     {
         if (_path != null)
         {
-            _pathCurrentConnectionProgress += Time.deltaTime;
+            Edge    edge              = _path.GetEdge(_pathCurrentEdge);
+            Vector3 startNodePosition = _test.GetNodeComponent(edge.SourceNodeId).transform.position;
+            Vector3 endNodePosition   = _test.GetNodeComponent(edge.TargetNodeId).transform.position;
+            float   edgeLength        = (endNodePosition - startNodePosition).magnitude;
 
-            if (_pathCurrentConnectionProgress >= 1)
+            transform.position = Vector3.Lerp(startNodePosition, endNodePosition, _pathCurrentEdgeProgress);
+
+            _pathCurrentEdgeProgress += (_speed*Time.deltaTime)/edgeLength;
+
+            if (_pathCurrentEdgeProgress >= 1)
             {
-                _pathCurrentConnectionProgress = 0;
+                _pathCurrentEdgeProgress = 0;
 
-                _pathCurrentConnection++;
+                _pathCurrentEdge++;
 
-                if (_pathCurrentConnection == _path.ConnectionCount)
+                if (_pathCurrentEdge == _path.EdgeCount)
                 {
-                    _pathCurrentConnection = 0;
+                    _pathCurrentEdge = 0;
                 }
             }
-
-            GraphConnection connection        = _path.Getconnection(_pathCurrentConnection);
-            Vector3         startNodePosition = _test.GetNodeComponent(connection.SourceNodeId).transform.position;
-            Vector3         endNodePosition   = _test.GetNodeComponent(connection.TargetNodeId).transform.position;
-
-            transform.position = Vector3.Lerp(startNodePosition, endNodePosition, _pathCurrentConnectionProgress);
         }
 
     }

@@ -1,13 +1,13 @@
 using Com.Bit34Games.Graphs;
 
 
-public class MyGraph : Graph<MyGraphConfig, MyGraphNode, MyGraphConnection>
+public class MyGraph : Graph<MyGraphConfig, MyNode, MyEdge>
 {
     //  CONSTRUCTORS
     public MyGraph():base(new MyGraphConfig(), new MyGraphAllocator()){}
 
     //  METHODS
-    public MyGraphNode CreateNode()
+    public MyNode CreateNode()
     {
         return AddNode();
     }
@@ -19,6 +19,6 @@ public class MyGraph : Graph<MyGraphConfig, MyGraphNode, MyGraphConnection>
 
     public void ConnectNodes(int sourceNodeId, int targetNodeId)
     {
-        AddConnection(sourceNodeId, targetNodeId);
+        AddEdge(sourceNodeId, targetNodeId);
     }
 }

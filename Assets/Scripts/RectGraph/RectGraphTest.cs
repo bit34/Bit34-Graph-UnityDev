@@ -45,18 +45,18 @@ public class RectGraphTest : GraphTestBase
         MyRectGraphConfig config      = new MyRectGraphConfig(Vector3.right, 
                                                               Vector3.up, 
                                                               false, 
-                                                              _editPanel.StraightConnections, 
-                                                              _editPanel.DiagonalConnections);
+                                                              _editPanel.StraightEdgess, 
+                                                              _editPanel.DiagonalEdgess);
         _graph = new MyRectGraph(columnCount, rowCount, config);
 
         CreateNodeObjects();
-        ClearConnectionObjects();
-        CreateConnectionObjects<MyRectGraphConfig, MyRectGraphNode, MyRectGraphConnection>(_graph);
+        ClearEdgeObjects();
+        CreateEdgeObjects<MyRectGraphConfig, MyRectNode, MyRectEdge>(_graph);
 
         _agent = new MyRectAgent();
         _graph.AddAgent(_agent);
 
-        _pathConfig = new MyRectPathConfig(IsConnectionAccesible);
+        _pathConfig = new MyRectPathConfig(IsEdgeAccesible);
     }
 
     private void CreateNodeObjects()
@@ -67,15 +67,15 @@ public class RectGraphTest : GraphTestBase
         {
             for (int r = 0; r < _graph.rowCount; r++)
             {
-                MyRectGraphNode node          = _graph.GetNodeByLocation(c,r);
-                GameObject      nodeObject    = Instantiate(NodePrefab, NodeContainer.transform);
-                NodeComponent   nodeComponent = nodeObject.GetComponent<NodeComponent>();
+                MyRectNode    node          = _graph.GetNodeByLocation(c,r);
+                GameObject    nodeObject    = Instantiate(NodePrefab, NodeContainer.transform);
+                NodeComponent nodeComponent = nodeObject.GetComponent<NodeComponent>();
                 
                 nodeObject.transform.localPosition = node.position;
 
                 node.component = nodeComponent;
 
-                nodeComponent.Init(node, "["+node.Column+","+node.Row+"]");
+                nodeComponent.Init(node.Id, "["+node.Column+","+node.Row+"]");
 
                 if (nodeComponent.IsIntersectingObstacle())
                 {
@@ -129,9 +129,9 @@ public class RectGraphTest : GraphTestBase
     
 #endregion
 
-    private bool IsConnectionAccesible(GraphConnection connection, IAgentPathOwner pathOwner)
+    private bool IsEdgeAccesible(Edge edge, IPathOwner pathOwner)
     {
-        return _graph.GetNode(connection.TargetNodeId).isAccesible;
+        return _graph.GetNode(edge.TargetNodeId).isAccesible;
     }
 
 }

@@ -81,18 +81,18 @@ TextMesh:
   m_GameObject: {fileID: 2189670680119704901}
   m_Text: 999
   m_OffsetZ: 0
-  m_CharacterSize: 0.0125
+  m_CharacterSize: 0.02
   m_LineSpacing: 1
   m_Anchor: 4
   m_Alignment: 1
   m_TabSize: 4
-  m_FontSize: 156
-  m_FontStyle: 1
+  m_FontSize: 90
+  m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4288322202
+    rgba: 4278190080
 --- !u!1 &2589458441977584822
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,7 +119,7 @@ Transform:
   m_GameObject: {fileID: 2589458441977584822}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.474862, y: 0.474862, z: 7.597792}
+  m_LocalScale: {x: 0.66, y: 0.66, z: 1}
   m_Children: []
   m_Father: {fileID: 5801267140626985353}
   m_RootOrder: 0
@@ -163,12 +163,12 @@ SpriteRenderer:
   m_SortingLayerID: 1659452635
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: db18d471162294de0b57ed0c48d7f782, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 890dcdcc088e544f98c92c694c91108c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 2.56, y: 2.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -184,9 +184,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5801267140626985353}
   - component: {fileID: 3822082201758949061}
-  - component: {fileID: 5967614449200367401}
+  - component: {fileID: 1736032742864182162}
   m_Layer: 0
-  m_Name: RectGraphNode
+  m_Name: Node
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -221,7 +221,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5967614449200367401
+--- !u!114 &1736032742864182162
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -235,8 +235,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collider: {fileID: 3822082201758949061}
   _shape: {fileID: 2856225028454707625}
-  _regularSprite: {fileID: 21300000, guid: db18d471162294de0b57ed0c48d7f782, type: 3}
-  _notAccesibleSprite: {fileID: 21300000, guid: 76728c58030384e98a8f16368683b8e3,
+  _regularSprite: {fileID: 21300000, guid: 890dcdcc088e544f98c92c694c91108c, type: 3}
+  _notAccesibleSprite: {fileID: 21300000, guid: 40aa56f0c5a584a11a07d9045dc345e7,
     type: 3}
   _pathStartSprite: {fileID: 21300000, guid: a05550ea438dd432d89eec7a7ad0b4b7, type: 3}
   _pathTargetSprite: {fileID: 21300000, guid: 6a654c23621e248858a0a5cf6570d160, type: 3}

@@ -1,7 +1,7 @@
 using Com.Bit34Games.Graphs;
 using UnityEngine;
 
-public class MyRectGraphNode : RectGraphNode, IGraphNode
+public class MyRectNode : RectNode<MyRectEdge>, IGraphNode
 {
     //  MEMBERS
     public Vector3       position;

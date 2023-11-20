@@ -1,7 +1,7 @@
 using Com.Bit34Games.Graphs;
 using UnityEngine;
 
-public class MyRectGraphConfig : RectGraphConfig<MyRectGraphNode>
+public class MyRectGraphConfig : RectGraphConfig<MyRectNode, MyRectEdge>
 {
     //  MEMBERS
     public readonly Vector3 xAxis;
@@ -22,14 +22,14 @@ public class MyRectGraphConfig : RectGraphConfig<MyRectGraphNode>
         this.yAxis = yAxis;
     }
 
-    override public float CalculateConnectionWeight(MyRectGraphNode sourceNode, MyRectGraphNode targetNode)
+    override public float CalculateEdgeWeight(MyRectNode sourceNode, MyRectNode targetNode)
     {
         return (targetNode.position - sourceNode.position).magnitude;
     }
 
-    override public void InitializeNode(RectGraphNode node, int column, int row)
+    override public void InitializeNode(RectNode<MyRectEdge> node, int column, int row)
     {
-        MyRectGraphNode castedNode = (MyRectGraphNode)node;
+        MyRectNode castedNode = (MyRectNode)node;
         castedNode.position = GetNodePosition(column, row);
     }
 
