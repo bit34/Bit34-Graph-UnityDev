@@ -40,8 +40,8 @@ public class RectGraphTest : GraphTestBase
     {
         ClearNodeObjects();
 
-        int               columnCount = (int)_editPanel.ColumnCount;
-        int               rowCount    = (int)_editPanel.RowCount;
+        int               columnCount = _editPanel.ColumnCount;
+        int               rowCount    = _editPanel.RowCount;
         MyRectGraphConfig config      = new MyRectGraphConfig(Vector3.right, 
                                                               Vector3.up, 
                                                               false, 
