@@ -224,8 +224,7 @@ public abstract class GraphTestBase : MonoBehaviour, IGraphTest
         }
     }
 
-    protected void CreateEdgeObjects<TConfig, TNode, TEdge>(Graph<TConfig, TNode, TEdge> graph)
-        where TConfig : GraphConfig<TNode,TEdge>
+    protected void CreateEdgeObjects<TNode, TEdge>(Graph<TNode, TEdge> graph)
         where TNode : Node<TEdge>, IGraphNode
         where TEdge : Edge
     {

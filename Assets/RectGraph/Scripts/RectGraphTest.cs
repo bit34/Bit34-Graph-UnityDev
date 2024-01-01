@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using Com.Bit34Games.Graphs;
 
 
 public class RectGraphTest : GraphTestBase
@@ -14,7 +12,7 @@ public class RectGraphTest : GraphTestBase
     //      Private
     private MyRectGraph      _graph;
     private MyRectAgent      _agent;
-    private MyRectPathConfig _pathConfig;
+    private MyRectPathFinder _pathFinder;
 
 
     //  METHODS
@@ -40,28 +38,27 @@ public class RectGraphTest : GraphTestBase
     {
         ClearNodeObjects();
 
-        int               columnCount = _editPanel.ColumnCount;
-        int               rowCount    = _editPanel.RowCount;
-        MyRectGraphConfig config      = new MyRectGraphConfig(Vector3.right, 
-                                                              Vector3.up, 
-                                                              false, 
-                                                              _editPanel.StraightEdgess, 
-                                                              _editPanel.DiagonalEdgess);
-        _graph = new MyRectGraph(columnCount, rowCount, config);
+        _graph = new MyRectGraph(Vector3.right, 
+                                 Vector3.up, 
+                                 false, 
+                                 _editPanel.StraightEdgess, 
+                                 _editPanel.DiagonalEdgess,
+                                 _editPanel.ColumnCount, 
+                                 _editPanel.RowCount);
 
         CreateNodeObjects();
         ClearEdgeObjects();
-        CreateEdgeObjects<MyRectGraphConfig, MyRectNode, MyRectEdge>(_graph);
+        CreateEdgeObjects(_graph);
 
         _agent = new MyRectAgent();
         _graph.AddAgent(_agent);
 
-        _pathConfig = new MyRectPathConfig(IsEdgeAccesible);
+        _pathFinder = new MyRectPathFinder();
     }
 
     private void CreateNodeObjects()
     {
-        NodeContainer.transform.position = -0.5f * _graph.Config.GetNodePosition(_graph.columnCount-1, _graph.rowCount-1);
+        NodeContainer.transform.position = -0.5f * _graph.GetNodePosition(_graph.columnCount-1, _graph.rowCount-1);
 
         for (int c = 0; c < _graph.columnCount; c++)
         {
@@ -112,7 +109,7 @@ public class RectGraphTest : GraphTestBase
 
     override protected void PathFindUpdatePath()
     {
-        SetPath(_agent.FindPath(_pathStartNodeId, _pathTargetNodeId, _pathConfig));
+        SetPath(_pathFinder.FindPath(_agent, _pathStartNodeId, _pathTargetNodeId));
     }
     
     override protected void PathFindClearPath()
@@ -128,10 +125,5 @@ public class RectGraphTest : GraphTestBase
     }
     
 #endregion
-
-    private bool IsEdgeAccesible(Edge edge, IPathOwner pathOwner)
-    {
-        return _graph.GetNode(edge.TargetNodeId).isAccesible;
-    }
 
 }

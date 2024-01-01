@@ -53,5 +53,5 @@
         "Temp/": true
     },
     "editor.accessibilitySupport": "off",
-    "dotnet.defaultSolution": "unity_dev.sln"
+    "dotnet.defaultSolution": "unity_examples.sln"
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Com.Bit34Games.Graphs;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,9 +7,9 @@ public class GraphTest : GraphTestBase
 {
     //  MEMBERS
     //      Private
-    private MyGraph      _graph;
-    private MyAgent      _agent;
-    private MyPathConfig _pathConfig;
+    private MyGraph                             _graph;
+    private MyAgent                             _agent;
+    private PathFinder<MyAgent, MyNode, MyEdge> _pathFinder;
 
 
     //  METHODS
@@ -36,12 +37,12 @@ public class GraphTest : GraphTestBase
             }
 
             ClearEdgeObjects();
-            CreateEdgeObjects<MyGraphConfig, MyNode, MyEdge>(_graph);
+            CreateEdgeObjects<MyNode, MyEdge>(_graph);
 
             _agent = new MyAgent();
             _graph.AddAgent(_agent);
 
-            _pathConfig = new MyPathConfig();
+            _pathFinder = new PathFinder<MyAgent, MyNode, MyEdge>(true, true);
         }
     }
 
@@ -62,15 +63,15 @@ public class GraphTest : GraphTestBase
                     Destroy(nodeComponent.gameObject);
 
                     ClearEdgeObjects();
-                    CreateEdgeObjects<MyGraphConfig, MyNode, MyEdge>(_graph);
+                    CreateEdgeObjects<MyNode, MyEdge>(_graph);
                 }
             }
             else
             {
-                Vector3                nodePosition  = Camera.main.ScreenToWorldPoint(Input.mousePosition+new Vector3(0,0,-Camera.main.transform.position.z));
-                GameObject             nodeObject    = Instantiate(NodePrefab, NodeContainer.transform);
+                Vector3       nodePosition  = Camera.main.ScreenToWorldPoint(Input.mousePosition+new Vector3(0,0,-Camera.main.transform.position.z));
+                GameObject    nodeObject    = Instantiate(NodePrefab, NodeContainer.transform);
                 NodeComponent nodeComponent = nodeObject.GetComponent<NodeComponent>();
-                MyNode            node          = _graph.CreateNode();
+                MyNode        node          = _graph.CreateNode();
 
                 nodeObject.transform.position = nodePosition;
 
@@ -82,7 +83,7 @@ public class GraphTest : GraphTestBase
                 ConnectNodeToOthers(node);
 
                 ClearEdgeObjects();
-                CreateEdgeObjects<MyGraphConfig, MyNode, MyEdge>(_graph);
+                CreateEdgeObjects(_graph);
             }
         }
     }
@@ -101,7 +102,7 @@ public class GraphTest : GraphTestBase
 
     override protected void PathFindUpdatePath()
     {
-        SetPath(_agent.FindPath(_pathStartNodeId, _pathTargetNodeId, _pathConfig));
+        SetPath(_pathFinder.FindPath(_agent, _pathStartNodeId, _pathTargetNodeId));
     }
     
     override protected void PathFindClearPath()

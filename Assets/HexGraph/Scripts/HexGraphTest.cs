@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using Com.Bit34Games.Graphs;
 
 
@@ -14,7 +13,7 @@ public class HexGraphTest : GraphTestBase
     //      Private
     private MyHexGraph      _graph;
     private MyHexAgent      _agent;
-    private MyHexPathConfig _pathConfig;
+    private MyHexPathFinder _pathFinder;
 
 
     //  METHODS
@@ -40,12 +39,11 @@ public class HexGraphTest : GraphTestBase
     {
         ClearNodeObjects();
 
-        int              columnCount = _editPanel.ColumnCount;
-        int              rowCount    = _editPanel.RowCount;
-        MyHexGraphConfig config      = new MyHexGraphConfig(Vector3.right, 
-                                                              Vector3.up, 
-                                                              false);
-        _graph = new MyHexGraph(columnCount, rowCount, config);
+        _graph = new MyHexGraph(Vector3.right, 
+                                Vector3.up, 
+                                false, 
+                                _editPanel.ColumnCount, 
+                                _editPanel.RowCount);
 
         CreateNodeObjects();
         ClearEdgeObjects();
@@ -54,12 +52,13 @@ public class HexGraphTest : GraphTestBase
         _agent = new MyHexAgent();
         _graph.AddAgent(_agent);
 
-        _pathConfig = new MyHexPathConfig(IsEdgeAccesible);
+
+        _pathFinder = new MyHexPathFinder();
     }
 
     private void CreateNodeObjects()
     {
-        NodeContainer.transform.position = -0.5f * _graph.Config.GetNodePosition(_graph.columnCount-1, _graph.rowCount-1);
+        NodeContainer.transform.position = -0.5f * _graph.GetNodePosition(_graph.columnCount-1, _graph.rowCount-1);
 
         for (int c = 0; c < _graph.columnCount; c++)
         {
@@ -110,7 +109,7 @@ public class HexGraphTest : GraphTestBase
 
     override protected void PathFindUpdatePath()
     {
-        SetPath(_agent.FindPath(_pathStartNodeId, _pathTargetNodeId, _pathConfig));
+        SetPath(_pathFinder.FindPath(_agent, _pathStartNodeId, _pathTargetNodeId));
     }
     
     override protected void PathFindClearPath()
