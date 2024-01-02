@@ -15,8 +15,7 @@ public class MyHexGraph : HexGraph<MyHexNode, MyHexEdge, MyHexAgent>
                       bool    isYAxisUp,
                       int     columnCount, 
                       int     rowCount) :
-     base(new MyHexGraphAllocator(), 
-          isYAxisUp,
+     base(isYAxisUp,
           columnCount, 
           rowCount)
     {
@@ -31,6 +30,11 @@ public class MyHexGraph : HexGraph<MyHexNode, MyHexEdge, MyHexAgent>
     }
 
     //  METHODS
+    override protected MyHexNode AllocateNode()           { return new MyHexNode(); }
+    override protected void      FreeNode(MyHexNode node) { }
+    override protected MyHexEdge AllocateEdge()           { return new MyHexEdge(); }
+    override protected void      FreeEdge(MyHexEdge edge) { }
+    
     override protected float CalculateEdgeWeight(MyHexNode sourceNode, MyHexNode targetNode)
     {
         return (targetNode.position - sourceNode.position).magnitude;

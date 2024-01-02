@@ -15,8 +15,7 @@ public class MyRectGraph : RectGraph<MyRectNode, MyRectEdge, MyRectAgent>
                        bool    hasDiagonalEdges,
                        int     columnCount, 
                        int     rowCount) :
-     base(new MyRectGraphAllocator(), 
-          isYAxisUp,
+     base(isYAxisUp,
           hasStraightEdges,
           hasDiagonalEdges,
           columnCount, 
@@ -32,6 +31,11 @@ public class MyRectGraph : RectGraph<MyRectNode, MyRectEdge, MyRectAgent>
     }
 
     //  METHODS
+    override protected MyRectNode AllocateNode()            { return new MyRectNode(); }
+    override protected void       FreeNode(MyRectNode node) { }
+    override protected MyRectEdge AllocateEdge()            { return new MyRectEdge(); }
+    override protected void       FreeEdge(MyRectEdge edge) { }
+
     override protected float CalculateEdgeWeight(MyRectNode sourceNode, MyRectNode targetNode)
     {
         return (targetNode.position - sourceNode.position).magnitude;
