@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Com.Bit34Games.Graphs;
 
 
 public class HexGraphTest : GraphTestBase
@@ -47,7 +46,7 @@ public class HexGraphTest : GraphTestBase
 
         CreateNodeObjects();
         ClearEdgeObjects();
-        CreateEdgeObjects(_graph);
+        CreateEdgeObjects<MyHexNode, MyHexEdge>(_graph.GetNodeEnumerator());
 
         _agent = new MyHexAgent();
         _graph.AddAgent(_agent);
@@ -125,10 +124,5 @@ public class HexGraphTest : GraphTestBase
     }
     
 #endregion
-
-    private bool IsEdgeAccesible(Edge edge, IPathOwner pathOwner)
-    {
-        return _graph.GetNode(edge.TargetNodeId).isAccesible;
-    }
 
 }

@@ -1,7 +1,7 @@
 using Com.Bit34Games.Graphs;
 
 
-public class MyGraph : Graph<MyNode, MyEdge>
+public class MyGraph : Graph<MyNode, MyEdge, MyAgent>
 {
     //  CONSTRUCTORS
     public MyGraph():base(new MyGraphAllocator(), 0){}
@@ -11,7 +11,7 @@ public class MyGraph : Graph<MyNode, MyEdge>
     {
         return (targetNode.position - sourceNode.position).magnitude;
     }
-    
+
     public MyNode CreateNode()
     {
         return AddNode();

@@ -48,7 +48,7 @@ public class RectGraphTest : GraphTestBase
 
         CreateNodeObjects();
         ClearEdgeObjects();
-        CreateEdgeObjects(_graph);
+        CreateEdgeObjects<MyRectNode, MyRectEdge>(_graph.GetNodeEnumerator());
 
         _agent = new MyRectAgent();
         _graph.AddAgent(_agent);

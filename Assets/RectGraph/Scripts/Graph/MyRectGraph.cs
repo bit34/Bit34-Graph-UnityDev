@@ -1,7 +1,7 @@
 using Com.Bit34Games.Graphs;
 using UnityEngine;
 
-public class MyRectGraph : RectGraph<MyRectNode, MyRectEdge>
+public class MyRectGraph : RectGraph<MyRectNode, MyRectEdge, MyRectAgent>
 {
     //  MEMBERS
     public readonly Vector3 xAxis;

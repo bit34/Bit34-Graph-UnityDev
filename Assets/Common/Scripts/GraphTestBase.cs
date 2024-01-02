@@ -224,11 +224,10 @@ public abstract class GraphTestBase : MonoBehaviour, IGraphTest
         }
     }
 
-    protected void CreateEdgeObjects<TNode, TEdge>(Graph<TNode, TEdge> graph)
-        where TNode : Node<TEdge>, IGraphNode
+    protected void CreateEdgeObjects<TNode, TEdge>(IEnumerator<TNode> nodes)
+        where TNode : Node<TEdge>
         where TEdge : Edge
     {
-        IEnumerator<TNode> nodes = graph.GetNodeEnumerator();
         while (nodes.MoveNext() == true)
         {
             TNode node = nodes.Current;

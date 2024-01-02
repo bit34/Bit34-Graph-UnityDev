@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Com.Bit34Games.Graphs;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,9 +6,9 @@ public class GraphTest : GraphTestBase
 {
     //  MEMBERS
     //      Private
-    private MyGraph                             _graph;
-    private MyAgent                             _agent;
-    private PathFinder<MyAgent, MyNode, MyEdge> _pathFinder;
+    private MyGraph      _graph;
+    private MyAgent      _agent;
+    private MyPathFinder _pathFinder;
 
 
     //  METHODS
@@ -37,12 +36,12 @@ public class GraphTest : GraphTestBase
             }
 
             ClearEdgeObjects();
-            CreateEdgeObjects<MyNode, MyEdge>(_graph);
+            CreateEdgeObjects<MyNode, MyEdge>(_graph.GetNodeEnumerator());
 
             _agent = new MyAgent();
             _graph.AddAgent(_agent);
 
-            _pathFinder = new PathFinder<MyAgent, MyNode, MyEdge>(true, true);
+            _pathFinder = new MyPathFinder();
         }
     }
 
@@ -63,7 +62,7 @@ public class GraphTest : GraphTestBase
                     Destroy(nodeComponent.gameObject);
 
                     ClearEdgeObjects();
-                    CreateEdgeObjects<MyNode, MyEdge>(_graph);
+                    CreateEdgeObjects<MyNode, MyEdge>(_graph.GetNodeEnumerator());
                 }
             }
             else
@@ -83,7 +82,7 @@ public class GraphTest : GraphTestBase
                 ConnectNodeToOthers(node);
 
                 ClearEdgeObjects();
-                CreateEdgeObjects(_graph);
+                CreateEdgeObjects<MyNode, MyEdge>(_graph.GetNodeEnumerator());
             }
         }
     }

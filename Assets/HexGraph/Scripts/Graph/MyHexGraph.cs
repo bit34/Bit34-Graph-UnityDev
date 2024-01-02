@@ -1,7 +1,7 @@
 using Com.Bit34Games.Graphs;
 using UnityEngine;
 
-public class MyHexGraph : HexGraph<MyHexNode, MyHexEdge>
+public class MyHexGraph : HexGraph<MyHexNode, MyHexEdge, MyHexAgent>
 {
     //  MEMBERS
     public readonly Vector3 xAxis;
