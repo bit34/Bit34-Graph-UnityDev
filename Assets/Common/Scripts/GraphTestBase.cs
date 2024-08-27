@@ -64,7 +64,7 @@ public abstract class GraphTestBase : MonoBehaviour, IGraphTest
         switch(_mode)
         {
             case GraphTestModes.Edit:     EditModeUninit();     break;
-            case GraphTestModes.PathFind: PathFindModeUninit(); ClearPathAndSelection(); break;
+            case GraphTestModes.PathFind: PathFindModeUninit(); break;
         }
 
         _mode = newMode;
@@ -77,7 +77,7 @@ public abstract class GraphTestBase : MonoBehaviour, IGraphTest
         }
     }
 
-    protected void SetPath(Path path)
+    private void SetPath(Path path)
     {
         Path = path;
 
@@ -109,20 +109,28 @@ public abstract class GraphTestBase : MonoBehaviour, IGraphTest
     abstract protected void EditModeUpdate();
     abstract protected void EditModeUninit();
 
-    abstract protected void PathFindModeInit();
-    abstract protected void PathFindUpdatePath();
-    abstract protected void PathFindClearPath();
-    abstract protected void PathFindModeUninit();
+    abstract protected Path PathFind(int startNodeId, int targetNodeId);
     
     abstract public NodeComponent GetNodeComponent(int nodeId);
+
+    private void PathFindModeInit()
+    {
+        _pathStartNodeId  = -1;
+        _pathTargetNodeId = -1;
+    }
+
+    private void PathFindModeUninit()
+    {
+        ClearPathAndSelection();
+    }
 
     private void PathFindModeUpdate()
     {
         //  Clicked on scene
         if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject() == false)
         {
-            Ray        ray          = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+            Ray        ray          = Camera.main.ScreenPointToRay(Input.mousePosition);
             bool       hitSomething = Physics.Raycast(ray, out hit);
 
             //  input intersects an object
@@ -149,7 +157,7 @@ public abstract class GraphTestBase : MonoBehaviour, IGraphTest
                         else
                         {
                             SelectPathTarget(nodeComponent);
-                            PathFindUpdatePath();
+                            SetPath(PathFind(_pathStartNodeId, _pathTargetNodeId));
                         }
                     }
                     else
@@ -182,7 +190,7 @@ public abstract class GraphTestBase : MonoBehaviour, IGraphTest
             _pathTargetNodeId = -1;
         }
 
-        PathFindClearPath();
+        SetPath(null);
     }
 
     private void SelectPathStart(NodeComponent nodeComponent)

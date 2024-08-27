@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using Com.Bit34Games.Graphs;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 
 public class GraphTest : GraphTestBase
 {
@@ -92,25 +94,13 @@ public class GraphTest : GraphTestBase
 #endregion
 
 
-#region Path finding
+#region Graph methods
 
-    override protected void PathFindModeInit()
+    override protected Path PathFind(int startNodeId, int targetNodeId)
     {
-        SetPath(null);
-    }
-
-    override protected void PathFindUpdatePath()
-    {
-        SetPath(_pathFinder.FindPath(_agent, _pathStartNodeId, _pathTargetNodeId));
+        return _pathFinder.FindPath(_agent, startNodeId, targetNodeId);
     }
     
-    override protected void PathFindClearPath()
-    {
-        SetPath(null);
-    }
-
-    override protected void PathFindModeUninit() { }
-
     override public NodeComponent GetNodeComponent(int nodeId)
     {
         return _graph.GetNode(nodeId).component;
