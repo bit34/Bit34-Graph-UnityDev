@@ -1,6 +1,7 @@
 using Com.Bit34Games.Graphs;
 using UnityEngine;
 
+
 public class MyHexGraph : HexGraph<MyHexNode, MyHexEdge, MyHexAgent>
 {
     //  MEMBERS
@@ -30,10 +31,20 @@ public class MyHexGraph : HexGraph<MyHexNode, MyHexEdge, MyHexAgent>
     }
 
     //  METHODS
-    override protected MyHexNode AllocateNode()           { return new MyHexNode(); }
-    override protected void      FreeNode(MyHexNode node) { }
-    override protected MyHexEdge AllocateEdge()           { return new MyHexEdge(); }
-    override protected void      FreeEdge(MyHexEdge edge) { }
+    override protected MyHexNode AllocateNode()
+    {
+        return new MyHexNode();
+    }
+
+    override protected void FreeNode(MyHexNode node)
+    { }
+
+    override protected MyHexEdge AllocateEdge()
+    {
+        return new MyHexEdge();
+    }
+
+    override protected void FreeEdge(MyHexEdge edge) { }
     
     override protected float CalculateEdgeWeight(MyHexNode sourceNode, MyHexNode targetNode)
     {
