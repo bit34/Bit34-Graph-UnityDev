@@ -1,0 +1,8 @@
+{
+    "packages" : [
+        {
+            "name" : "com.bit34games.graph",
+            "url" : "git@github.com:/bit34/Bit34-Graph-UPM.git"
+        }
+    ]
+}

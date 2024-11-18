@@ -55,5 +55,8 @@ sysinfo.txt
 ehthumbs.db
 [Tt]humbs.db
 
-Assets/Libraries/Graph/
-Assets/Libraries/Graph.meta
+# =====================================
+Assets/Bit34/Packages/
+Assets/Bit34/Packages.meta
+Assets/Bit34/PackageDev/
+Assets/Bit34/PackageDev.meta
