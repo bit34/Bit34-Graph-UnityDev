@@ -1,13 +1,13 @@
 {
   "dependencies": {
     "com.bit34games.packagemanager": {
-      "version": "https://github.com/bit34/Bit34-PackageManager-UPM.git#v0.3.0",
+      "version": "https://github.com/bit34/Bit34-PackageManager-UPM.git#v0.3.1",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "2.0.0"
       },
-      "hash": "8d026fd40c19b65b3855658382ddc4126d248129"
+      "hash": "dc538c8e9e14619f95fd5f61ef35553a3f86af42"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
